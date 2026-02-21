@@ -51,7 +51,7 @@
         .page { display:none; padding:16px; overflow-y:auto; flex:1; margin-bottom:70px; }
         .page.active { display:block; }
         .card { background:#1f2c34; border-radius:16px; padding:20px; margin-bottom:15px; }
-        /* Profile card for home page (new design) */
+        /* Profile card for home page */
         .profile-home-card {
             background: linear-gradient(135deg, #8e44ad, #3a1c71);
             border-radius: 16px;
@@ -298,7 +298,7 @@
         </div>
 
         <!-- PAGES -->
-        <!-- HOME PAGE – now with profile card instead of wallet card -->
+        <!-- HOME PAGE – profile card -->
         <div id="home" class="page active">
             <div class="profile-home-card">
                 <img id="homeProfileAvatar" src="https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png" class="profile-home-avatar" onerror="this.src='https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png'">
@@ -577,7 +577,39 @@
         };
 
         // ========== WALLPAPERS ==========
-        const wallpapers = [ /* keep full list from original */ ];
+        const wallpapers = [
+            { id: 'moving1', name: 'Moving Waves 1', url: 'https://premier-gold-wthio10a6v.edgeone.app/moving%20walaksb.mp4', moving: true },
+            { id: 'moving2', name: 'Moving Waves 2', url: 'https://colourful-violet-jqpqyp5emd.edgeone.app/moving%20sggsgs.mp4', moving: true },
+            { id: 'moving3', name: 'Moving Waves 3', url: 'https://parliamentary-coral-phidn8dyzg.edgeone.app/moving%20whevejd.mp4', moving: true },
+            { id: 'moving4', name: 'Moving Waves 4', url: 'https://worthy-orange-z8l14p8cm6.edgeone.app/moving%20walsnsn.mp4', moving: true },
+            { id: 'moving5', name: 'Video Guru 1', url: 'https://marginal-lime-nng2c9cp9c.edgeone.app/Video.Guru_20260219_171036307.mp4', moving: true },
+            { id: 'moving6', name: 'Video Guru 2', url: 'https://unaware-plum-g4qh9rcxuh.edgeone.app/Video.Guru_20260219_172003785.mp4', moving: true },
+            { id: 'moving7', name: 'Moving AGSH', url: 'https://husky-lime-nrtzwo5pqd.edgeone.app/moving%20wallpaper%20agsh.mp4', moving: true },
+            { id: 'moving8', name: 'Moving AA', url: 'https://adorable-blush-gwojhzc0sx.edgeone.app/moving%20wallpaper%20aa.mp4', moving: true },
+            { id: 'static1', name: 'Purple Abstract', url: 'https://furious-peach-wlmhvgxcob.edgeone.app/images%20-%202026-02-19T160551.567.jpeg', moving: false },
+            { id: 'static2', name: 'Blue Abstract', url: 'https://average-harlequin-e4re4mwodq.edgeone.app/images%20-%202026-02-19T160543.856.jpeg', moving: false },
+            { id: 'static3', name: 'Sunset Mountains', url: 'https://i.ibb.co/yF4NS12s/images-2026-02-19-T160448-732.jpg', moving: false },
+            { id: 'static4', name: 'Forest Path', url: 'https://i.ibb.co/fGD3FNV1/images-2026-02-19-T160430-065.jpg', moving: false },
+            { id: 'static5', name: 'Ocean Waves', url: 'https://i.ibb.co/FbQ4wpqR/images-2026-02-19-T160344-114.jpg', moving: false },
+            { id: 'static6', name: 'Abstract Art', url: 'https://i.ibb.co/KpX2hZBV/71-T8m-Z3u-HL.jpg', moving: false },
+            { id: 'static7', name: '3D Wallpaper', url: 'https://i.ibb.co/VnNfjRB/3d-walpaper.jpg', moving: false },
+            { id: 'static8', name: 'Live Wallpaper', url: 'https://i.ibb.co/1BwNFRW/live-walpaper.jpg', moving: false },
+            { id: 'static9', name: 'Porsche AI', url: 'https://i.ibb.co/5xKL6h2X/porsch-a-i.png', moving: false },
+            { id: 'static10', name: 'Indigenous Person 1', url: 'https://i.ibb.co/4ZjTwg1J/portrait-3d-cartoon-indigenous-person-1.jpg', moving: false },
+            { id: 'static11', name: 'Indigenous Person 2', url: 'https://i.ibb.co/C5Y8qg8r/portrait-3d-cartoon-indigenous-person.jpg', moving: false },
+            { id: 'static12', name: 'Karola G', url: 'https://i.ibb.co/MxS184g9/pexels-karola-g-5713581.jpg', moving: false },
+            { id: 'static13', name: 'Alien World 3', url: 'https://i.ibb.co/sY8CWxR/cheerful-3d-alien-world-3.jpg', moving: false },
+            { id: 'static14', name: 'Isolated House', url: 'https://i.ibb.co/RTFwFzRd/digital-art-isolated-house-1.jpg', moving: false },
+            { id: 'static15', name: 'Fantasy Lamp', url: 'https://i.ibb.co/Xxy4z8vj/lamp-with-fantasy-futuristic-design.jpg', moving: false },
+            { id: 'static16', name: 'Shiny Bubbles', url: 'https://i.ibb.co/6cpY4XNd/shiny-bubbles-wallpaper.jpg', moving: false },
+            { id: 'static17', name: 'Alien World 1', url: 'https://i.ibb.co/sdj8WfWJ/cheerful-3d-alien-world-1.jpg', moving: false },
+            { id: 'static18', name: 'Alien World', url: 'https://i.ibb.co/pBjCVVbg/cheerful-3d-alien-world.jpg', moving: false },
+            { id: 'static19', name: 'Astronaut Diving', url: 'https://i.ibb.co/5WNBTwz2/astronaut-diving-digital-art.jpg', moving: false },
+            { id: 'static20', name: 'Alien World 2', url: 'https://i.ibb.co/wNzDw6Fc/cheerful-3d-alien-world-2.jpg', moving: false },
+            { id: 'static21', name: 'Cute Animals Christmas', url: 'https://i.ibb.co/G4mYkfFZ/3d-cute-animals-christmas.jpg', moving: false },
+            { id: 'static22', name: 'Half Robot Tiger', url: 'https://i.ibb.co/kgBffwrh/futuristic-half-robot-tiger-nature-1.jpg', moving: false }
+        ];
+
         let selectedWallpaper = wallpapers.find(w => w.id === 'static17') || wallpapers[0];
         const preloadedVideos = new Map();
 
@@ -701,7 +733,6 @@
             const bal = currentUserData?.balance || 0;
             document.getElementById('walletBalance').innerText = `$${bal.toFixed(2)}`;
             document.getElementById('headerBal').innerText = `$${bal.toFixed(2)}`;
-            // Note: homeBalance element removed
         }
 
         // ========== AUTH ==========
@@ -766,10 +797,27 @@
         window.logout = () => signOut(auth);
 
         // ========== WALLPAPER FUNCTIONS ==========
+        function renderWallpaperGrid() {
+            const grid = document.getElementById('wallpaperGrid');
+            if (!grid) return;
+            grid.innerHTML = wallpapers.map(w => {
+                const isSelected = selectedWallpaper && selectedWallpaper.id === w.id;
+                return `
+                    <div class="wallpaper-item ${isSelected ? 'selected' : ''} ${w.moving ? 'moving' : ''}" 
+                         onclick="selectWallpaper('${w.id}')"
+                         style="background-image: url('${w.moving ? '' : w.url}'); background-color: ${w.moving ? '#2a3942' : 'transparent'};">
+                        ${w.moving ? '<i class="fas fa-video" style="font-size:2rem; color:#8e44ad;"></i>' : ''}
+                        <span class="preview-label">${w.name}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
         window.selectWallpaper = function(id) {
             selectedWallpaper = wallpapers.find(w => w.id === id) || wallpapers[0];
             renderWallpaperGrid();
         };
+
         window.openWallpaperModal = function() {
             document.getElementById('settingsMenu').classList.remove('active');
             const savedId = currentUserData?.wallpaper || 'static17';
@@ -778,6 +826,7 @@
             document.getElementById('wallpaperModal').style.display = 'flex';
             document.getElementById('wallpaperStatus').textContent = '';
         };
+
         window.saveWallpaper = async function() {
             const status = document.getElementById('wallpaperStatus');
             status.textContent = 'Saving...';
@@ -794,6 +843,7 @@
                 status.style.color = '#ff6b6b';
             }
         };
+
         function applyChatWallpaper() {
             const videoEl = document.getElementById('chatVideo');
             const imageEl = document.getElementById('chatImageBg');
@@ -820,6 +870,7 @@
             const menu = document.getElementById('settingsMenu');
             menu.classList.toggle('active');
         };
+
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('settingsMenu');
             const icon = document.querySelector('.settings-icon');
@@ -835,6 +886,7 @@
             document.getElementById('newNameInput').value = currentUserData?.fullName || '';
             document.getElementById('nameUpdateStatus').textContent = '';
         };
+
         window.updateDisplayName = async function() {
             const newName = document.getElementById('newNameInput').value.trim();
             if (!newName) {
@@ -864,11 +916,14 @@
         function loadNotifications() {
             if (!currentUser) return;
             if (notificationsUnsubscribe) notificationsUnsubscribe();
+
             debugLog('Setting up notifications listener for user', currentUser.uid);
+
             const q = query(
                 collection(db, 'notifications'),
                 where('userId', '==', currentUser.uid)
             );
+
             notificationsUnsubscribe = onSnapshot(q, (snap) => {
                 const notifs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 notifs.sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
@@ -880,6 +935,7 @@
                 debugLog('Notifications listener error:', error.message);
             });
         }
+
         function updateNotificationUI(notifs) {
             const badge = document.getElementById('notificationBadge');
             const bell = document.getElementById('bellIcon');
@@ -913,6 +969,7 @@
                 `;
             }).join('');
         }
+
         window.openNotification = async (id, link) => {
             await updateDoc(doc(db, 'notifications', id), { read: true });
             document.getElementById('notificationDropdown').classList.remove('active');
@@ -925,6 +982,7 @@
                 }
             }
         };
+
         window.markAllAsRead = async () => {
             const q = query(collection(db, 'notifications'), where('userId', '==', currentUser.uid), where('read', '==', false));
             const snap = await getDocs(q);
@@ -932,6 +990,7 @@
             snap.docs.forEach(d => batch.update(d.ref, { read: true }));
             await batch.commit();
         };
+
         window.clearAllNotifications = async () => {
             if (!confirm('Delete all notifications?')) return;
             const q = query(collection(db, 'notifications'), where('userId', '==', currentUser.uid));
@@ -983,6 +1042,7 @@
                 debugLog('Recent chats listener error:', error.message);
             });
         }
+
         window.openChatFromRecent = function(chatId, name, avatar, isCeleb, partnerId) {
             debugLog('Opening chat from recent:', chatId, name, isCeleb);
             updateDoc(doc(db, 'userChats', currentUser.uid, 'chats', chatId), { unreadCount: 0 });
@@ -993,7 +1053,7 @@
             }
         };
 
-        // ========== LOAD CELEBRITIES ==========
+        // ========== LOAD CELEBRITIES FROM FIRESTORE ==========
         async function loadCelebrities() {
             const q = query(collection(db, 'celebrities'));
             const snap = await getDocs(q);
@@ -1001,6 +1061,8 @@
             debugLog('Celebrities loaded:', celebrities.length);
             renderCelebs();
         }
+
+        // ========== ADMIN ADD CELEBRITY ==========
         window.addCelebrity = async function() {
             const name = document.getElementById('newCelebName').value.trim();
             const img = document.getElementById('newCelebImg').value.trim();
@@ -1011,6 +1073,7 @@
             loadCelebrities();
             Toastify({ text: "Celebrity added" }).showToast();
         };
+
         function renderCelebs() {
             const grid = document.getElementById('allCelebGrid');
             const home = document.getElementById('homeCelebList');
@@ -1037,18 +1100,21 @@
             });
         }
 
-        // ========== CHAT OPENERS ==========
+        // ========== CHAT OPENERS (FIXED: Private celebrity chats) ==========
         window.openCelebChat = function(name, avatar) {
             debugLog('Opening private celebrity chat with:', name);
             isCelebChat = true;
+            // Create a unique private chat ID for this user + celebrity
             const privateChatId = `celeb_${name.replace(/[^a-zA-Z0-9]/g, '_')}_${currentUser.uid}`;
             openChat(name, avatar, null, true, privateChatId);
         };
+
         window.openUserChat = function(name, avatar, uid) {
             debugLog('Opening user chat with:', name, uid);
             isCelebChat = false;
             openChat(name, avatar, uid, false, null);
         };
+
         function openChat(name, avatar, uid, isCeleb, predefinedChatId = null) {
             document.getElementById('chatName').innerText = name;
             document.getElementById('chatAvatar').src = avatar;
@@ -1057,6 +1123,7 @@
             if (chatUnsubscribe) chatUnsubscribe();
 
             if (isCeleb) {
+                // Use the private chat ID (celebrityName_userId)
                 currentChatId = predefinedChatId || `celeb_${name.replace(/[^a-zA-Z0-9]/g, '_')}_${currentUser.uid}`;
                 currentChatPartner = { name, avatar, isCeleb: true, partnerId: name };
                 document.getElementById('callButtons').style.display = 'none';
@@ -1070,6 +1137,7 @@
                 debugLog('User chat ID:', currentChatId);
             }
 
+            // Save to user's recent chats
             setDoc(doc(db, 'userChats', currentUser.uid, 'chats', currentChatId), {
                 partnerName: name,
                 partnerAvatar: avatar,
@@ -1099,7 +1167,7 @@
             });
         }
 
-        // ========== SEND MESSAGE ==========
+        // ========== SEND MESSAGE (FIXED: Store private chat ID in adminMessages) ==========
         window.sendMessage = async function() {
             const inp = document.getElementById('msgInput');
             if (!inp.value.trim() || !currentChatId) return;
@@ -1151,6 +1219,7 @@
 
             if (currentChatPartner.isCeleb) {
                 debugLog('Storing message in adminMessages for celebrity', currentChatPartner.name);
+                // Store with the private chat ID so admin knows which user it's from
                 await addDoc(collection(db, 'adminMessages'), {
                     userId: currentUser.uid,
                     userName: currentUserData?.fullName || 'User',
@@ -1160,7 +1229,7 @@
                     timestamp: serverTimestamp(),
                     read: false,
                     fromAdmin: false,
-                    chatId: currentChatId
+                    chatId: currentChatId  // Store the private chat ID
                 });
             }
 
@@ -1209,6 +1278,7 @@
             document.getElementById('finalTrackingCode').innerText = track;
             document.getElementById('successModal').style.display = 'flex';
         };
+
         window.attemptWithdrawal = () => {
             if ((currentUserData.vipLevel || 1) < 4) { Toastify({ text: "VIP 4 required" }).showToast(); return; }
             document.getElementById('withdrawModal').style.display = 'flex';
@@ -1225,6 +1295,7 @@
             document.getElementById('withdrawModal').style.display = 'none';
             Toastify({ text: "Withdrawal requested" }).showToast();
         };
+
         window.openDepositModal = () => document.getElementById('depositModal').style.display = 'flex';
         window.copyAddress = () => {
             navigator.clipboard.writeText('bc1qm3mfz4ytpkthcdcl0fep3ndzq2g3jxme4de05p');
@@ -1257,9 +1328,11 @@
                 status.innerText = 'Error: ' + e.message;
             }
         };
-        window.openGiftStore = () => { document.getElementById('giftStoreModal').style.display = 'flex'; };
 
-        // ========== NAVIGATION ==========
+        window.openGiftStore = () => {
+            document.getElementById('giftStoreModal').style.display = 'flex';
+        };
+
         window.navTo = (page, el) => {
             debugLog('Navigating to page:', page);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1267,6 +1340,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if (el) el.classList.add('active');
 
+            // Show/hide floating support button
             const supportBtn = document.getElementById('supportChatFloat');
             const musicBtn = document.getElementById('musicFloat');
             if (page === 'profile') {
@@ -1278,6 +1352,7 @@
                 document.getElementById('musicPlayerMini').style.display = 'none';
             }
 
+            // Manage posts listener
             if (page === 'posts') {
                 loadPosts();
             } else {
@@ -1311,6 +1386,7 @@
             }
             return { allowed: true, count };
         }
+
         async function updateUploadButton() {
             const limit = await checkUploadLimit();
             if (limit.allowed) {
@@ -1321,6 +1397,7 @@
                 uploadPostBtn.disabled = true;
             }
         }
+
         uploadPostBtn.addEventListener('click', async () => {
             const limit = await checkUploadLimit();
             if (!limit.allowed) {
@@ -1332,6 +1409,7 @@
             postFile.value = '';
             postUploadStatus.textContent = '';
         });
+
         window.uploadPost = async function() {
             const file = postFile.files[0];
             const caption = postCaption.value.trim();
@@ -1415,6 +1493,7 @@
             });
             commentUnsubscribes.set(postId, unsubscribe);
         }
+
         function renderComments(postId, comments) {
             const commentList = document.getElementById(`comments-${postId}`);
             if (!commentList) return;
@@ -1432,6 +1511,7 @@
                 `;
             }).join('');
         }
+
         window.toggleComments = function(postId) {
             const section = document.getElementById(`comment-section-${postId}`);
             if (section.style.display === 'none' || !section.style.display) {
@@ -1445,6 +1525,7 @@
                 }
             }
         };
+
         window.postComment = async function(postId) {
             const input = document.getElementById(`comment-input-${postId}`);
             const text = input.value.trim();
@@ -1468,6 +1549,7 @@
                 debugLog('Posts snapshot received, size:', snap.size);
                 const now = Date.now();
                 const oneDay = 24 * 60 * 60 * 1000;
+
                 const deletePromises = [];
                 snap.docs.forEach(docSnap => {
                     const post = docSnap.data();
@@ -1476,6 +1558,7 @@
                     }
                 });
                 await Promise.all(deletePromises);
+
                 const freshSnap = await getDocs(q);
                 const posts = freshSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderPosts(posts);
@@ -1484,6 +1567,7 @@
                 debugLog('Posts listener error:', error.message);
             });
         }
+
         function renderPosts(posts) {
             if (!postsFeed) return;
             if (posts.length === 0) {
@@ -1529,6 +1613,7 @@
                 `;
             }).join('');
         }
+
         window.toggleLike = async function(postId) {
             if (!currentUser) return;
             const postRef = doc(db, 'posts', postId);
@@ -1549,6 +1634,7 @@
                 c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none';
             });
         });
+
         document.getElementById('searchUsers')?.addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
             document.querySelectorAll('#userList .celeb-card').forEach(c => {
@@ -1595,6 +1681,7 @@
                 renderMarketplace(products);
             });
         }
+
         function renderMarketplace(products) {
             const grid = document.getElementById('productsGrid');
             if (!grid) return;
@@ -1619,11 +1706,16 @@
             if (user) {
                 currentUser = user;
                 debugLog('User logged in:', user.email);
-                const docSnap = await getDoc(doc(db, 'users', user.uid));
-                if (docSnap.exists()) {
-                    currentUserData = docSnap.data();
+                
+                // Always try to get or create the user document
+                const userRef = doc(db, 'users', user.uid);
+                let userSnap = await getDoc(userRef);
+                
+                if (userSnap.exists()) {
+                    currentUserData = userSnap.data();
                     debugLog('User data loaded:', currentUserData.fullName);
                 } else {
+                    // Create default user document
                     currentUserData = {
                         fullName: user.email.split('@')[0],
                         email: user.email,
@@ -1634,13 +1726,21 @@
                         uploadCount: 0,
                         lastUploadDate: ''
                     };
-                    await setDoc(doc(db, 'users', user.uid), currentUserData);
-                    debugLog('User document created');
+                    try {
+                        await setDoc(userRef, currentUserData);
+                        debugLog('User document created');
+                    } catch (e) {
+                        console.error("Error creating user document:", e);
+                        debugLog('Error creating user document:', e.message);
+                        Toastify({ text: "Error creating user profile", backgroundColor: "#e74c3c" }).showToast();
+                    }
                 }
+
+                // Update UI
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'flex';
+                
                 updateBalanceDisplay();
-                // Update home profile
                 document.getElementById('homeProfileName').innerText = currentUserData?.fullName ?? 'User';
                 document.getElementById('homeProfileVip').innerText = `VIP ${currentUserData?.vipLevel ?? '1'}`;
                 document.getElementById('homeProfileAvatar').src = currentUserData?.avatar ?? defaultAvatar;
@@ -1685,16 +1785,29 @@
         let unsubscribeOfferCandidates = null;
         let unsubscribeAnswerCandidates = null;
 
-        const servers = { iceServers: [ { urls: "stun:stun.l.google.com:19302" } ] };
+        const servers = {
+            iceServers: [
+                { urls: "stun:stun.l.google.com:19302" }
+            ]
+        };
 
-        function showCallModal() { document.getElementById("callModal").style.display = "flex"; }
-        function hideCallModal() { document.getElementById("callModal").style.display = "none"; }
+        function showCallModal() {
+            document.getElementById("callModal").style.display = "flex";
+        }
+
+        function hideCallModal() {
+            document.getElementById("callModal").style.display = "none";
+        }
+
         function updateCallUI(status, showAcceptReject = false, showEnd = false, avatarUrl = null) {
-            if (avatarUrl) document.getElementById('callAvatarImg').src = avatarUrl;
+            if (avatarUrl) {
+                document.getElementById('callAvatarImg').src = avatarUrl;
+            }
             document.getElementById('callStatus').innerText = status;
             document.getElementById('acceptCallBtn').style.display = showAcceptReject ? 'inline-block' : 'none';
             document.getElementById('rejectCallBtn').style.display = showAcceptReject ? 'inline-block' : 'none';
             document.getElementById('endCallBtn').style.display = showEnd ? 'inline-block' : 'none';
+            
             if (status === 'In call') {
                 document.getElementById('localVideo').style.display = 'block';
                 document.getElementById('remoteVideo').style.display = 'block';
@@ -1705,9 +1818,13 @@
                 document.getElementById('callAvatarContainer').style.display = 'block';
             }
         }
+
         async function requestMedia(type) {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: type === 'video',
+                    audio: true
+                });
                 debugLog('Media access granted');
                 return stream;
             } catch (error) {
@@ -1725,12 +1842,28 @@
                 throw error;
             }
         }
+
         async function cleanupCall(deleteFromFirestore = true) {
-            if (peerConnection) { peerConnection.close(); peerConnection = null; }
-            if (localStream) { localStream.getTracks().forEach(track => track.stop()); localStream = null; }
-            if (unsubscribeCallListener) { unsubscribeCallListener(); unsubscribeCallListener = null; }
-            if (unsubscribeOfferCandidates) { unsubscribeOfferCandidates(); unsubscribeOfferCandidates = null; }
-            if (unsubscribeAnswerCandidates) { unsubscribeAnswerCandidates(); unsubscribeAnswerCandidates = null; }
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+            if (unsubscribeCallListener) {
+                unsubscribeCallListener();
+                unsubscribeCallListener = null;
+            }
+            if (unsubscribeOfferCandidates) {
+                unsubscribeOfferCandidates();
+                unsubscribeOfferCandidates = null;
+            }
+            if (unsubscribeAnswerCandidates) {
+                unsubscribeAnswerCandidates();
+                unsubscribeAnswerCandidates = null;
+            }
             if (currentCallId && deleteFromFirestore) {
                 try {
                     const offerCandidatesSnap = await getDocs(collection(db, 'calls', currentCallId, 'offerCandidates'));
@@ -1748,22 +1881,33 @@
             }
             hideCallModal();
         }
+
         window.endCall = cleanupCall;
+
         async function startCall(type, receiverId, partnerName, partnerAvatar) {
             if (!currentUser) return;
             if (currentUserData.vipLevel < 4) {
                 Toastify({ text: "VIP 4 required for calls", backgroundColor: "#e74c3c" }).showToast();
                 return;
             }
+
             try {
                 localStream = await requestMedia(type);
-            } catch { return; }
+            } catch {
+                return;
+            }
+
             peerConnection = new RTCPeerConnection(servers);
-            peerConnection.ontrack = event => { document.getElementById("remoteVideo").srcObject = event.streams[0]; };
+            peerConnection.ontrack = event => {
+                document.getElementById("remoteVideo").srcObject = event.streams[0];
+            };
+
             localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
             document.getElementById("localVideo").srcObject = localStream;
+
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
+
             const callData = {
                 callerId: currentUser.uid,
                 receiverId: receiverId,
@@ -1774,6 +1918,7 @@
             };
             const callRef = await addDoc(collection(db, 'calls'), callData);
             currentCallId = callRef.id;
+
             unsubscribeCallListener = onSnapshot(doc(db, 'calls', currentCallId), async (snap) => {
                 const data = snap.data();
                 if (!data) return;
@@ -1787,6 +1932,7 @@
                     cleanupCall(false);
                 }
             });
+
             unsubscribeAnswerCandidates = onSnapshot(collection(db, 'calls', currentCallId, 'answerCandidates'), snapshot => {
                 snapshot.docChanges().forEach(change => {
                     if (change.type === 'added') {
@@ -1796,6 +1942,7 @@
                     }
                 });
             });
+
             peerConnection.onicecandidate = async (event) => {
                 if (event.candidate) {
                     await addDoc(collection(db, 'calls', currentCallId, 'offerCandidates'), {
@@ -1803,10 +1950,13 @@
                     });
                 }
             };
+
             showCallModal();
             updateCallUI('Connecting...', false, true, partnerAvatar);
         }
+
         window.startCall = startCall;
+
         async function listenForIncomingCalls() {
             onSnapshot(query(
                 collection(db, 'calls'),
@@ -1818,30 +1968,44 @@
                 const data = callDoc.data();
                 currentCallId = callDoc.id;
                 incomingCallDoc = callDoc;
+
                 const callerSnap = await getDoc(doc(db, 'users', data.callerId));
                 const callerData = callerSnap.data();
+
                 showCallModal();
                 updateCallUI(`Incoming ${data.type} call from ${callerData?.fullName || 'User'}`, true, false, callerData?.avatar || defaultAvatar);
+
                 document.getElementById('acceptCallBtn').onclick = () => acceptCall(callDoc, callerData);
                 document.getElementById('rejectCallBtn').onclick = () => rejectCall(callDoc);
             });
         }
+
         async function acceptCall(callDoc, callerData) {
             try {
                 localStream = await requestMedia(callDoc.data().type);
-            } catch { return; }
+            } catch {
+                return;
+            }
+
             peerConnection = new RTCPeerConnection(servers);
-            peerConnection.ontrack = event => { document.getElementById("remoteVideo").srcObject = event.streams[0]; };
+            peerConnection.ontrack = event => {
+                document.getElementById("remoteVideo").srcObject = event.streams[0];
+            };
+
             localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
             document.getElementById("localVideo").srcObject = localStream;
+
             const offer = new RTCSessionDescription(JSON.parse(callDoc.data().offer));
             await peerConnection.setRemoteDescription(offer);
+
             const answer = await peerConnection.createAnswer();
             await peerConnection.setLocalDescription(answer);
+
             await updateDoc(doc(db, 'calls', currentCallId), {
                 answer: JSON.stringify(answer),
                 status: 'accepted'
             });
+
             unsubscribeOfferCandidates = onSnapshot(collection(db, 'calls', currentCallId, 'offerCandidates'), snapshot => {
                 snapshot.docChanges().forEach(change => {
                     if (change.type === 'added') {
@@ -1851,6 +2015,7 @@
                     }
                 });
             });
+
             peerConnection.onicecandidate = async (event) => {
                 if (event.candidate) {
                     await addDoc(collection(db, 'calls', currentCallId, 'answerCandidates'), {
@@ -1858,6 +2023,7 @@
                     });
                 }
             };
+
             unsubscribeCallListener = onSnapshot(doc(db, 'calls', currentCallId), (snap) => {
                 const data = snap.data();
                 if (data && data.status === 'ended') {
@@ -1865,12 +2031,15 @@
                     cleanupCall(false);
                 }
             });
+
             updateCallUI('In call', false, true, callerData?.avatar);
         }
+
         async function rejectCall(callDoc) {
             await updateDoc(doc(db, 'calls', currentCallId), { status: 'rejected' });
             cleanupCall(true);
         }
+
         document.getElementById('endCallBtn').onclick = () => cleanupCall(true);
     </script>
 </body>
