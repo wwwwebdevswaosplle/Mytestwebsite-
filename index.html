@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,8 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Preload default wallpaper -->
+    <link rel="preload" as="image" href="https://res.cloudinary.com/dnkll2fha/image/upload/f_auto,q_auto,w_800/v1/wallpapers/static17">
     
     <style>
         /* ========== RESET & GLOBAL ========== */
@@ -137,6 +139,7 @@
             height: 35px;
             border-radius: 50%;
             border: 2px solid #8e44ad;
+            object-fit: cover;
         }
         .notification-wrapper {
             position: relative;
@@ -173,103 +176,95 @@
             font-weight: bold;
         }
 
-        /* Music Player Button - NEW */
-        .music-float {
-            position: fixed;
-            bottom: 180px;
-            right: 20px;
-            width: 55px;
-            height: 55px;
-            background: #8e44ad;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(142,68,173,0.6);
-            z-index: 2602;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .music-float:hover {
-            transform: scale(1.1);
-        }
-        .music-float i {
-            font-size: 1.8rem;
-            color: white;
-        }
-        .music-float.playing {
-            background: #2ecc71;
-            animation: pulse-green 2s infinite;
-        }
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
-        }
-
+        /* Notification dropdown */
         .notification-dropdown {
             position: absolute;
             top: 45px;
             right: 0;
-            width: 350px;
+            width: 320px;
+            max-width: 90vw;
+            max-height: 70vh;
             background: #1f2c34;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid #2a3942;
             z-index: 2000;
             display: none;
+            overflow: hidden;
         }
         .notification-dropdown.active {
             display: block;
         }
         .notification-header {
-            padding: 15px;
+            padding: 12px 15px;
             border-bottom: 1px solid #2a3942;
             display: flex;
             justify-content: space-between;
+            background: #1f2c34;
+            position: sticky;
+            top: 0;
+            z-index: 2;
         }
         .notification-list {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
         }
         .notification-item {
-            padding: 15px;
+            padding: 12px;
             border-bottom: 1px solid #2a3942;
             cursor: pointer;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: flex-start;
+            transition: background 0.2s;
         }
-        .notification-item.unread {
+        .notification-item:hover {
             background: #2a3942;
         }
+        .notification-item.unread {
+            background: rgba(142,68,173,0.2);
+        }
         .notification-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             object-fit: cover;
+            flex-shrink: 0;
         }
         .notification-content {
             flex: 1;
+            min-width: 0;
         }
         .notification-title {
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .notification-message {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #aaa;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         .notification-time {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #666;
-            margin-top: 5px;
+            margin-top: 3px;
         }
         .notification-actions {
             display: flex;
-            padding: 10px 15px;
+            padding: 10px 12px;
             gap: 8px;
             border-top: 1px solid #2a3942;
+            background: #1f2c34;
+            position: sticky;
+            bottom: 0;
+            z-index: 2;
         }
         .notification-actions button {
             flex: 1;
@@ -279,6 +274,11 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        .notification-actions button:hover {
+            background: #3a4a54;
         }
 
         .bottom-nav {
@@ -319,7 +319,36 @@
             display: block;
         }
 
-        /* Profile card styles */
+        .card {
+            background: #1f2c34;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .wallet-card {
+            background: linear-gradient(135deg, #8e44ad, #3a1c71);
+            text-align: center;
+            padding: 30px 20px;
+        }
+        .balance-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+        .vip-badge {
+            background: rgba(0,0,0,0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* ========== PROFILE CARD (HOME) ========== */
         .profile-card-mini {
             background: #1f2c34;
             border-radius: 16px;
@@ -359,36 +388,55 @@
             margin-right: 4px;
         }
 
-        /* ALL YOUR ORIGINAL STYLES BELOW */
-        .card {
-            background: #1f2c34;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
+        /* ========== PROFILE PAGE AVATAR ========== */
+        .profile-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 4px solid #8e44ad;
+            box-shadow: 0 0 20px rgba(142,68,173,0.5);
+            margin: 0 auto;
         }
-        .wallet-card {
-            background: linear-gradient(135deg, #8e44ad, #3a1c71);
-            text-align: center;
-            padding: 30px 20px;
-        }
-        .balance-label {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-        .balance-amount {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 10px 0;
-        }
-        .vip-badge {
-            background: rgba(0,0,0,0.3);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+        .profile-pic-edit {
+            position: relative;
             display: inline-block;
-            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .profile-pic-edit .profile-avatar-large {
+            cursor: pointer;
+        }
+        .profile-pic-edit i {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #8e44ad;
+            border-radius: 50%;
+            padding: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
         }
 
+        /* ========== FIND FRIENDS AVATAR ========== */
+        .friend-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            border: 2px solid #8e44ad;
+        }
+
+        /* ========== CHAT AVATAR ========== */
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8e44ad;
+        }
+
+        /* Profile page layout */
         .profile-header {
             position: relative;
             margin-bottom: 20px;
@@ -409,6 +457,33 @@
             color: #8e44ad;
             background: rgba(255,255,255,0.1);
         }
+        
+        .profile-music-icon {
+            position: absolute;
+            top: 10px;
+            right: 60px;
+            font-size: 1.5rem;
+            color: #8e44ad !important;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            z-index: 10;
+            background: rgba(0,0,0,0.2);
+        }
+        .profile-music-icon:hover {
+            background: rgba(142,68,173,0.3);
+            transform: scale(1.1);
+        }
+        .profile-music-icon.playing {
+            animation: pulse-purple 2s infinite;
+        }
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(142, 68, 173, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(142, 68, 173, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(142, 68, 173, 0); }
+        }
+
         .settings-menu {
             position: absolute;
             top: 50px;
@@ -517,6 +592,10 @@
         .recent-chat-name {
             font-weight: 600;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
         }
         .recent-chat-message {
             font-size: 0.85rem;
@@ -633,6 +712,7 @@
             transform: none;
         }
 
+        /* ========== POST CARD ========== */
         .posts-feed {
             display: flex;
             flex-direction: column;
@@ -662,16 +742,49 @@
         }
         .post-name {
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
         }
         .post-time {
             font-size: 0.75rem;
             color: #8696a0;
         }
+        .post-media-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #000;
+            cursor: pointer;
+        }
         .post-media {
             width: 100%;
-            max-height: 400px;
-            object-fit: contain;
-            background: #000;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .video-overlay i {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .video-overlay.fade-out {
+            opacity: 0;
         }
         .post-caption {
             padding: 15px;
@@ -695,6 +808,111 @@
         }
         .post-like i, .post-comment i {
             font-size: 1.2rem;
+        }
+
+        /* ===== FOLLOW BUTTON ===== */
+        .follow-btn {
+            background: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            width: auto;
+            margin: 0;
+        }
+        .follow-btn.following {
+            background: #2a3942;
+            color: #aaa;
+        }
+        .follow-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ===== USER POPUP MODAL ===== */
+        .user-popup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .user-popup-content {
+            background: #1f2c34;
+            max-width: 400px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid #8e44ad;
+        }
+        .user-popup-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8e44ad;
+            margin: 0 auto 15px;
+        }
+        .user-popup-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .user-popup-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 15px 0;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #8e44ad;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .user-popup-follow {
+            margin: 15px 0;
+        }
+        .user-popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+        }
+        .user-popup-close:hover {
+            color: #e74c3c;
+        }
+
+        /* ===== CHAT VERIFIED ICON (SMALLER) ===== */
+        .chat-name .verified-badge {
+            font-size: 1rem !important;
+            margin-left: 5px;
+        }
+
+        /* ===== PROFILE FOLLOW STATS ===== */
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
         }
 
         .comment-section {
@@ -768,6 +986,11 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .chat-background-video,
         .chat-background-image {
@@ -799,10 +1022,6 @@
             75% { transform: scale(1.03) translate(0.5%, 1%); }
             100% { transform: scale(1) translate(0, 0); }
         }
-        .chat-header, .chat-messages, .chat-input-area {
-            position: relative;
-            z-index: 1;
-        }
         .chat-header {
             display: flex;
             align-items: center;
@@ -810,15 +1029,33 @@
             background: rgba(31,44,52,0.9);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
         }
         .chat-header i {
             font-size: 1.5rem;
             cursor: pointer;
         }
         .chat-header img {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8e44ad;
+        }
+        .chat-header .chat-info {
+            flex: 1;
+            margin-left: 10px;
+        }
+        .chat-header .chat-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-header .online-status {
+            font-size: 0.75rem;
+            color: #2ecc71;
         }
         .chat-messages {
             flex: 1;
@@ -827,6 +1064,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            position: relative;
+            z-index: 1;
         }
         .message {
             max-width: 80%;
@@ -860,6 +1099,8 @@
             backdrop-filter: blur(10px);
             gap: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
         }
         .chat-input {
             flex: 1;
@@ -869,14 +1110,49 @@
             border-radius: 25px;
             color: white;
         }
-        .send-btn {
-            width: 40px;
-            height: 40px;
+        .send-btn, .chat-gift-btn {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: #8e44ad;
             color: white;
             border: none;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .chat-gift-btn:hover, .send-btn:hover {
+            transform: scale(1.1);
+            background: #9b59b6;
+        }
+
+        /* ========== FIND FRIENDS LIST ========== */
+        .friend-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #2a3942;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .friend-card:hover {
+            background: #3a4a54;
+        }
+        .friend-info {
+            flex: 1;
+        }
+        .friend-name {
+            font-weight: 600;
+        }
+        .friend-vip {
+            font-size: 0.8rem;
+            color: #aaa;
         }
 
         .wallpaper-grid {
@@ -926,6 +1202,7 @@
             border-radius: 4px;
         }
 
+        /* ===== MODAL STYLES ===== */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -944,6 +1221,8 @@
             border-radius: 20px;
             position: relative;
             border: 1px solid #8e44ad;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .close-modal {
             position: absolute;
@@ -952,6 +1231,9 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: #888;
+        }
+        .close-modal:hover {
+            color: #e74c3c;
         }
         .input-box {
             width: 100%;
@@ -967,43 +1249,293 @@
             resize: vertical;
         }
 
-        .gift-card-float {
+        /* Deposit method selector */
+        .deposit-method-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .method-btn {
+            flex: 1;
+            padding: 12px;
+            background: #2a3942;
+            border: 1px solid #8e44ad;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .method-btn.active {
+            background: #8e44ad;
+        }
+        .method-btn i {
+            margin-right: 8px;
+        }
+
+        .crypto-address {
+            background: #2a3942;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .crypto-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .crypto-header img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        .address-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1f2c34;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .address-box span {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: #8e44ad;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            width: auto;
+            margin: 0;
+        }
+
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .gift-card-item {
+            background: #2a3942;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .gift-card-item:hover {
+            border-color: #8e44ad;
+            transform: translateY(-2px);
+        }
+        .gift-card-item i {
+            font-size: 2rem;
+            color: #8e44ad;
+            margin-bottom: 8px;
+        }
+        .gift-card-item span {
+            font-size: 0.8rem;
+            display: block;
+        }
+
+        .redeem-section {
+            margin-top: 20px;
+            border-top: 1px solid #2a3942;
+            padding-top: 20px;
+        }
+        .redeem-btn {
+            background: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .gift-store {
+            background: #1f2c34;
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .gift-store-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #8e44ad, #3498db, #9b59b6, #2980b9);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gift-store-content {
+            position: relative;
+            z-index: 1;
+        }
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+        }
+        .bubble:nth-child(1) { left: 10%; width: 60px; height: 60px; animation-duration: 8s; }
+        .bubble:nth-child(2) { left: 20%; width: 30px; height: 30px; animation-duration: 12s; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 35%; width: 50px; height: 50px; animation-duration: 10s; animation-delay: 1s; }
+        .bubble:nth-child(4) { left: 50%; width: 80px; height: 80px; animation-duration: 14s; animation-delay: 3s; }
+        .bubble:nth-child(5) { left: 65%; width: 40px; height: 40px; animation-duration: 9s; animation-delay: 2.5s; }
+        .bubble:nth-child(6) { left: 80%; width: 70px; height: 70px; animation-duration: 11s; animation-delay: 1.5s; }
+        .bubble:nth-child(7) { left: 90%; width: 45px; height: 45px; animation-duration: 13s; animation-delay: 4s; }
+        @keyframes rise {
+            0% { bottom: -100px; transform: translateX(0); }
+            100% { bottom: 1080px; transform: translateX(100px); }
+        }
+        .gift-store-search {
+            margin-bottom: 20px;
+        }
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .store-item {
+            background: #2a3942;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .store-item:hover {
+            border-color: #8e44ad;
+            transform: translateY(-2px);
+        }
+        .store-item i {
+            font-size: 2.5rem;
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+        .store-item .name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .store-item .price {
+            color: #2ecc71;
+            font-weight: 700;
+        }
+
+        /* Floating gift button */
+        .gift-store-float {
             position: fixed;
             bottom: 100px;
             right: 20px;
             width: 65px;
             height: 65px;
-            background: linear-gradient(145deg, #ff9a44, #ff6b6b);
+            background: #8e44ad;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(255,107,107,0.6);
+            box-shadow: 0 8px 20px rgba(142,68,173,0.6);
             z-index: 2600;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        .gift-store-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(142,68,173,0.8);
+        }
+        .gift-store-float i {
+            font-size: 1.8rem;
+            color: white;
+        }
+        .gift-store-float span {
+            font-size: 10px;
+            color: white;
+            margin-top: 2px;
         }
 
-        .profile-pic-edit {
-            position: relative;
-            display: inline-block;
+        .gift-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
         }
-        .profile-pic-edit img {
-            width: 100px;
-            height: 100px;
+        .gift-spinner .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(142,68,173,0.3);
+            border-top: 5px solid #8e44ad;
             border-radius: 50%;
-            border: 4px solid #1f2c34;
-            cursor: pointer;
+            animation: spin 1s linear infinite;
         }
-        .profile-pic-edit i {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: #8e44ad;
+        .gift-spinner img {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            padding: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .blackhawk-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            border: 2px solid #8e44ad;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 50px rgba(142,68,173,0.5);
+            animation: fadeInOut 3s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .blackhawk-popup h2 {
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+        .blackhawk-popup p {
+            color: #aaa;
         }
 
         .spinner-overlay {
@@ -1038,7 +1570,6 @@
             margin-bottom: 10px;
         }
 
-        /* ===== CALL MODAL STYLES ===== */
         .call-modal {
             position: fixed;
             top: 0;
@@ -1114,7 +1645,6 @@
             padding: 8px 12px;
         }
 
-        /* ===== FLOATING RAINBOW SUPPORT BUTTON ===== */
         .support-chat-float {
             position: fixed;
             bottom: 180px;
@@ -1147,63 +1677,64 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* ===== DEBUG PANEL ===== */
-        #debugPanel {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.8);
-            color: #0f0;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 80%;
-            max-height: 200px;
-            overflow: auto;
-            font-family: monospace;
-            font-size: 12px;
-            z-index: 10000;
-            display: none;
-        }
-        #debugToggle {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            z-index: 10001;
-            background: #333;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        /* Empty state */
         .notification-empty {
-            padding: 30px;
+            padding: 20px;
             text-align: center;
             color: #8696a0;
         }
         .notification-empty i {
-            font-size: 3rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             opacity: 0.5;
         }
+
+        .transaction-item {
+            background: #2a3942;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .transaction-details {
+            flex: 1;
+        }
+        .transaction-type {
+            font-weight: 600;
+        }
+        .transaction-amount {
+            color: #2ecc71;
+        }
+        .transaction-negative {
+            color: #e74c3c;
+        }
+        .transaction-time {
+            font-size: 0.75rem;
+            color: #666;
+        }
+        .transaction-status {
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+        .status-pending { background: #f39c12; }
+        .status-completed { background: #2ecc71; }
+        .status-failed { background: #e74c3c; }
+
+        .spin-fast { animation-duration: 0.5s !important; }
+        .spin-medium { animation-duration: 0.8s !important; }
+        .spin-slow { animation-duration: 1.2s !important; }
     </style>
 </head>
 <body>
-    <div id="debugToggle" onclick="toggleDebug()">🐞 Debug</div>
-    <div id="debugPanel"></div>
-
-    <!-- Floating gift card button -->
-    <div class="gift-card-float" onclick="openGiftStore()"><i class="fas fa-gift"></i><span>GIFT</span></div>
-
-    <!-- Floating music player button - NEW -->
-    <div class="music-float" id="musicFloat" onclick="toggleGlobalMusic()" style="display: none;">
-        <i class="fas fa-music"></i>
+    <!-- Floating gift button (purple, only on homepage) -->
+    <div class="gift-store-float" id="giftStoreFloat" onclick="openGiftStoreWithSpinner()" style="display: none;">
+        <i class="fas fa-gift"></i>
+        <span>GIFT</span>
     </div>
 
-    <!-- Floating rainbow support button (only shown on Me page) -->
+    <!-- Floating rainbow support button (only on Me page) -->
     <div class="support-chat-float" id="supportChatFloat" onclick="openAdminChat()">
         <i class="fas fa-headset"></i>
     </div>
@@ -1250,13 +1781,13 @@
                     <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
                     <div id="notificationDropdown" class="notification-dropdown">
                         <div class="notification-header">
-                            <h3>Notifications</h3>
-                            <span id="notificationCount">0 new</span>
+                            <h3 style="font-size: 1rem;">Notifications</h3>
+                            <span id="notificationCount" style="font-size: 0.8rem;">0 new</span>
                         </div>
                         <div id="notificationList" class="notification-list"></div>
                         <div class="notification-actions">
-                            <button onclick="markAllAsRead()">Mark All Read</button>
-                            <button onclick="clearAllNotifications()">Clear All</button>
+                            <button onclick="markAllAsRead()">Mark Read</button>
+                            <button onclick="clearAllNotifications()">Clear</button>
                         </div>
                     </div>
                 </div>
@@ -1266,7 +1797,6 @@
 
         <!-- PAGES -->
         <div id="home" class="page active">
-            <!-- Profile card -->
             <div class="profile-card-mini" onclick="navTo('profile')" style="cursor: pointer;">
                 <img id="homeProfileAvatar" class="profile-avatar-mini" src="https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png" alt="Profile">
                 <div class="profile-info-mini">
@@ -1278,26 +1808,21 @@
                 <i class="fas fa-chevron-right" style="color: #8696a0;"></i>
             </div>
 
-            <!-- Balance card -->
-            <div class="">
-                <div class="">cmc</div>
-                <div class="" id=""></div>
-                <div class=""> <span id=""></span></div>
+            <div class="card wallet-card">
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount" id="homeBalance">$0.00</div>
+                <div class="vip-badge">VIP <span id="userVipLevel">1</span></div>
             </div>
-            
 
-            <!-- Active Celebrities -->
             <h3>Active Celebrities</h3>
             <div style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;" id="homeCelebList"></div>
             
-            <!-- Marketplace Card -->
             <div class="card" onclick="navTo('market')">
                 <h3><i class="fas fa-store" style="color: #8e44ad;"></i> New Arrivals</h3>
                 <p style="color:#aaa;">Private Meet Cards, Tickets & More available now!</p>
             </div>
         </div>
 
-        <!-- ALL OTHER PAGES REMAIN EXACTLY THE SAME -->
         <div id="celebs" class="page">
             <input type="text" class="input-box" id="searchCelebs" placeholder="Search Celebrities...">
             <div id="allCelebGrid" class="celeb-grid"></div>
@@ -1315,8 +1840,8 @@
         </div>
 
         <div id="chat" class="page">
-            <h3>Community Chat</h3>
-            <input type="text" class="input-box" id="searchUsers" placeholder="Find friends...">
+            <h3>Find Friends</h3>
+            <input type="text" class="input-box" id="searchUsers" placeholder="Search friends...">
             <div id="userList" style="display: flex; flex-direction: column; gap: 10px;"></div>
         </div>
 
@@ -1337,11 +1862,16 @@
             </div>
             <button class="action-btn btn-deposit" onclick="openDepositModal()"><i class="fas fa-plus-circle"></i> Deposit</button>
             <button class="action-btn btn-withdraw" onclick="attemptWithdrawal()"><i class="fas fa-university"></i> Withdraw</button>
+            
+            <h3 style="margin: 20px 0 10px;">Transaction History</h3>
+            <div id="transactionList" class="transaction-list"></div>
         </div>
 
         <div id="profile" class="page">
             <div class="profile-header">
                 <i class="fas fa-cog settings-icon" onclick="toggleSettingsMenu()"></i>
+                <i class="fas fa-music profile-music-icon" id="profileMusicIcon" onclick="toggleProfileMusic()" title="Play music"></i>
+                
                 <div class="settings-menu" id="settingsMenu">
                     <div class="settings-menu-item" onclick="openChangeNameModal()">
                         <i class="fas fa-user-edit"></i>
@@ -1355,11 +1885,22 @@
             </div>
             <div style="text-align: center;">
                 <div class="profile-pic-edit">
-                    <img id="profileAvatar" src="https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png" onclick="openAvatarModal()">
+                    <img id="profileAvatar" class="profile-avatar-large" src="https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png" onclick="openAvatarModal()" alt="Profile">
                     <i class="fas fa-camera" onclick="openAvatarModal()"></i>
                 </div>
-                <h2 id="profileName">Loading...</h2>
+                <h2 id="profileName" style="margin-top: 10px;">Loading...</h2>
                 <div class="vip-badge">Verified Member</div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="profileFollowers">0</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="profileFollowing">0</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                </div>
             </div>
             <button class="upload-post-btn" id="uploadPostBtn"><i class="fas fa-plus-circle"></i> Create Post</button>
             <button class="action-btn" onclick="logout()" style="background:#333;">Log Out</button>
@@ -1378,18 +1919,27 @@
         </div>
     </div>
 
-    <!-- CHAT WINDOW (with call buttons) -->
+    <!-- CHAT WINDOW -->
     <div id="chatInterface" class="chat-window">
         <video id="chatVideo" class="chat-background-video" loop muted playsinline preload="auto"></video>
         <div id="chatImageBg" class="chat-background-image"></div>
         <div class="chat-header">
             <i class="fas fa-arrow-left" onclick="closeChat()"></i>
-            <img id="chatAvatar" src="">
-            <div style="flex:1;"><span id="chatName"></span><div style="font-size:0.75rem; color:#2ecc71;">Online</div></div>
+            <img id="chatAvatar" class="chat-avatar" src="">
+            <div class="chat-info">
+                <div class="chat-name">
+                    <span id="chatName"></span>
+                    <i class="fas fa-check-circle verified-badge" id="chatVerifiedIcon" style="display: none;"></i>
+                </div>
+                <div class="online-status">Online</div>
+            </div>
             <div id="callButtons" style="display: none; gap: 10px; margin-right: 10px;">
                 <button id="audioCallBtn" style="background: none; border: none; color: #8e44ad; font-size: 1.2rem; cursor: pointer;">📞</button>
                 <button id="videoCallBtn" style="background: none; border: none; color: #8e44ad; font-size: 1.2rem; cursor: pointer;">🎥</button>
             </div>
+            <button class="chat-gift-btn" onclick="openSendGiftModal()" title="Send a gift">
+                <i class="fas fa-gift"></i>
+            </button>
         </div>
         <div id="messageContainer" class="chat-messages"></div>
         <div class="chat-input-area">
@@ -1398,32 +1948,270 @@
         </div>
     </div>
 
+    <!-- USER POPUP MODAL (also used for celebrities) -->
+    <div id="userPopupModal" class="user-popup-modal">
+        <div class="user-popup-content">
+            <span class="user-popup-close" onclick="closeUserPopup()">&times;</span>
+            <img id="popupAvatar" class="user-popup-avatar" src="" alt="User">
+            <div id="popupName" class="user-popup-name"></div>
+            <div id="popupVip" class="vip-badge" style="margin-bottom: 10px;"></div>
+            <div class="user-popup-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="popupFollowers">0</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="popupFollowing">0</div>
+                    <div class="stat-label">Following</div>
+                </div>
+            </div>
+            <div class="user-popup-follow">
+                <button id="popupFollowBtn" class="follow-btn" onclick="toggleFollowFromPopup()">Follow</button>
+            </div>
+            <button class="action-btn btn-primary" onclick="openUserChatFromPopup()" style="margin-top: 10px;">Send Message</button>
+        </div>
+    </div>
+
+    <!-- DEPOSIT MODAL -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('depositModal')">&times;</span>
+            <h3>Deposit Funds</h3>
+            <div class="deposit-method-selector">
+                <div class="method-btn active" onclick="selectDepositMethod('crypto')">
+                    <i class="fas fa-coins"></i> Crypto
+                </div>
+                <div class="method-btn" onclick="selectDepositMethod('gift')">
+                    <i class="fas fa-gift"></i> Gift Cards
+                </div>
+            </div>
+            <div id="cryptoDepositSection">
+                <p style="color:#aaa; margin-bottom:15px;">Send cryptocurrency to the addresses below. Funds will be credited after network confirmations.</p>
+                <div class="crypto-address">
+                    <div class="crypto-header">
+                        <img src="https://i.ibb.co/N68S0Nt3/Bitcoin.png" alt="Bitcoin" onerror="this.src='https://via.placeholder.com/30'">
+                        <span style="font-weight:600;">Bitcoin (BTC)</span>
+                    </div>
+                    <div class="address-box">
+                        <span>bc1qm3mfz4ytpkthcdcl0fep3ndzq2g3jxme4de05p</span>
+                        <button class="copy-btn" onclick="copyToClipboard('bc1qm3mfz4ytpkthcdcl0fep3ndzq2g3jxme4de05p')">Copy</button>
+                    </div>
+                </div>
+                <div class="crypto-address">
+                    <div class="crypto-header">
+                        <img src="https://i.ibb.co/d0MHYK27/Ethereum.png" alt="Ethereum" onerror="this.src='https://via.placeholder.com/30'">
+                        <span style="font-weight:600;">Ethereum (ERC20)</span>
+                    </div>
+                    <div class="address-box">
+                        <span>0x4507B199d512f0C44E021D4E020a99eB9Eb9023B</span>
+                        <button class="copy-btn" onclick="copyToClipboard('0x4507B199d512f0C44E021D4E020a99eB9Eb9023B')">Copy</button>
+                    </div>
+                </div>
+            </div>
+            <div id="giftDepositSection" style="display: none;">
+                <p style="color:#aaa; margin-bottom:15px;">Select a gift card type to redeem:</p>
+                <div class="gift-grid">
+                    <div class="gift-card-item" onclick="openRedeemModal('Apple iTunes')">
+                        <i class="fab fa-apple"></i>
+                        <span>Apple iTunes</span>
+                    </div>
+                    <div class="gift-card-item" onclick="openRedeemModal('Steam Wallet')">
+                        <i class="fab fa-steam"></i>
+                        <span>Steam Wallet</span>
+                    </div>
+                    <div class="gift-card-item" onclick="openRedeemModal('Google Play')">
+                        <i class="fab fa-google-play"></i>
+                        <span>Google Play</span>
+                    </div>
+                    <div class="gift-card-item" onclick="openRedeemModal('Razer Gold')">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Razer Gold</span>
+                    </div>
+                    <div class="gift-card-item" onclick="openRedeemModal('Amazon')">
+                        <i class="fab fa-amazon"></i>
+                        <span>Amazon</span>
+                    </div>
+                    <div class="gift-card-item" onclick="openRedeemModal('Walmart')">
+                        <i class="fas fa-store"></i>
+                        <span>Walmart</span>
+                    </div>
+                </div>
+                <div class="redeem-section">
+                    <button class="redeem-btn" onclick="openRedeemModal()">Redeem Gift Card</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REDEEM GIFT CARD MODAL -->
+    <div id="redeemModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('redeemModal')">&times;</span>
+            <h3>Redeem Gift Card</h3>
+            <select id="redeemCardType" class="input-box">
+                <option value="">Select Card Type</option>
+                <option value="Apple iTunes">Apple iTunes</option>
+                <option value="Steam Wallet">Steam Wallet</option>
+                <option value="Google Play">Google Play</option>
+                <option value="Razer Gold">Razer Gold</option>
+                <option value="Amazon">Amazon</option>
+                <option value="Walmart">Walmart</option>
+                <option value="Target">Target</option>
+                <option value="eBay">eBay</option>
+                <option value="Visa">Visa</option>
+                <option value="Mastercard">Mastercard</option>
+                <option value="American Express">American Express</option>
+                <option value="PlayStation">PlayStation</option>
+                <option value="Xbox">Xbox</option>
+                <option value="Roblox">Roblox</option>
+                <option value="Nintendo eShop">Nintendo eShop</option>
+                <option value="Starbucks">Starbucks</option>
+            </select>
+            <input type="text" id="redeemCode" class="input-box" placeholder="Enter 16-digit scratch code" maxlength="16">
+            <input type="number" id="redeemAmount" class="input-box" placeholder="Card Amount ($)" min="1">
+            <button onclick="submitRedeemRequest()" id="redeemSubmitBtn" style="background: #8e44ad;">Submit for Verification</button>
+            <div id="redeemStatus" class="status-message" style="margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <!-- GIFT CARD STORE MODAL (updated min/max) -->
+    <div id="giftStoreModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="closeModal('giftStoreModal'); clearBlackhawkInterval();">&times;</span>
+            <div id="giftStoreSpinner" style="display: flex; flex-direction: column; align-items: center; padding: 40px;">
+                <div class="spinner" style="width: 80px; height: 80px;"></div>
+                <img src="https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png" style="width: 100px; height: 100px; border-radius: 50%; margin: 20px 0;">
+                <p style="color:#8e44ad;">Loading Gift Store...</p>
+            </div>
+            <div id="giftStoreContent" style="display: none;">
+                <div class="gift-store">
+                    <div class="bubbles">
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                        <div class="bubble"></div>
+                    </div>
+                    <div class="gift-store-bg"></div>
+                    <div class="gift-store-content">
+                        <h2 style="color:#8e44ad; margin-bottom:20px;">Gift Card Store</h2>
+                        <div class="gift-store-search">
+                            <input type="text" id="giftStoreSearch" class="input-box" placeholder="Search gift cards..." oninput="filterGiftStore()">
+                        </div>
+                        <div class="store-grid" id="giftStoreGrid"></div>
+                        <p style="text-align:center; color:#aaa; margin-top:20px; font-size:0.8rem;">
+                            Trusted and controlled by Blackhawk Network Holdings
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GIFT PURCHASE MODAL (updated min/max to 50-2000) -->
+    <div id="giftPurchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('giftPurchaseModal')">&times;</span>
+            <h3 id="purchaseCardTitle">Purchase Gift Card</h3>
+            <div style="text-align:center; margin:20px 0;">
+                <i id="purchaseCardIcon" class="fas fa-gift" style="font-size:3rem; color:#8e44ad;"></i>
+            </div>
+            <div style="background:#2a3942; border-radius:12px; padding:15px; margin-bottom:15px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Available Balance:</span>
+                    <span id="purchaseBalance">$0.00</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                    <span>Min: $50</span>
+                    <span>Max: $2000</span>
+                </div>
+            </div>
+            <input type="number" id="purchaseAmount" class="input-box" placeholder="Enter amount ($50 - $2000)" min="50" max="2000">
+            <div id="purchaseError" style="color:#e74c3c; font-size:0.9rem; margin-bottom:10px; display:none;"></div>
+            <button onclick="processGiftPurchase()" id="purchaseBtn" style="background: #8e44ad;">Buy Now</button>
+            <div id="purchaseStatus" class="status-message" style="margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <!-- PURCHASE RESULT MODAL -->
+    <div id="purchaseResultModal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <span class="close-modal" onclick="closeModal('purchaseResultModal')">&times;</span>
+            <i class="fas fa-check-circle" style="font-size:3rem; color:#2ecc71; margin-bottom:15px;"></i>
+            <h3>Purchase Successful!</h3>
+            <p style="color:#aaa; margin:15px 0;">Your gift card code:</p>
+            <div style="background:#2a3942; padding:15px; border-radius:12px; font-family:monospace; font-size:1.2rem; margin-bottom:15px;" id="purchasedCode">XXXX XXXX XXXX XXXX</div>
+            <button class="copy-btn" onclick="copyToClipboard(document.getElementById('purchasedCode').innerText)" style="width:auto; margin:0 auto;">Copy Code</button>
+        </div>
+    </div>
+
+    <!-- SEND GIFT MODAL (unchanged, 1-200) -->
+    <div id="sendGiftModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('sendGiftModal')">&times;</span>
+            <h3>Send a Gift</h3>
+            <div id="sendGiftRecipientInfo" style="background:#2a3942; border-radius:12px; padding:15px; margin-bottom:15px; display:flex; align-items:center; gap:15px;">
+                <img id="sendGiftAvatar" class="chat-avatar" src="">
+                <div>
+                    <div style="font-weight:600;" id="sendGiftName"></div>
+                    <div style="font-size:0.8rem; color:#aaa;" id="sendGiftType"></div>
+                </div>
+            </div>
+            <select id="sendGiftType" class="input-box">
+                <option value="">Select Gift Type</option>
+                <option value="🎁 Basic Gift">🎁 Basic Gift ($1 - $50)</option>
+                <option value="🎉 Premium Gift">🎉 Premium Gift ($51 - $100)</option>
+                <option value="👑 VIP Gift">👑 VIP Gift ($101 - $200)</option>
+            </select>
+            <input type="number" id="sendGiftAmount" class="input-box" placeholder="Amount ($1 - $200)" min="1" max="200">
+            <div style="background:#2a3942; border-radius:12px; padding:15px; margin-bottom:15px;">
+                <div style="display:flex; justify-content:space-between;">
+                    <span>Your Balance:</span>
+                    <span id="sendGiftBalance">$0.00</span>
+                </div>
+            </div>
+            <div id="sendGiftError" style="color:#e74c3c; font-size:0.9rem; margin-bottom:10px; display:none;"></div>
+            <button onclick="processSendGift()" id="sendGiftBtn" style="background: #8e44ad;">Send Gift</button>
+        </div>
+    </div>
+
+    <!-- BLACKHAWK POPUP -->
+    <div id="blackhawkPopup" class="blackhawk-popup" style="display:none;">
+        <h2>🔒 Trusted Partner</h2>
+        <p>Controlled by Blackhawk Network Holdings</p>
+    </div>
+
     <!-- POST UPLOAD MODAL -->
     <div id="postUploadModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('postUploadModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('postUploadModal')">&times;</span>
             <h3>Create Post</h3>
             <textarea id="postCaption" class="input-box" placeholder="Write something..."></textarea>
             <input type="file" id="postFile" accept="image/*,video/*" class="input-box">
+            <p style="color:#aaa; font-size:0.8rem;">Max video size: 40MB</p>
             <div id="postUploadStatus" style="margin-bottom:10px;"></div>
             <button class="action-btn btn-primary" onclick="uploadPost()">Post</button>
         </div>
     </div>
 
-    <!-- OTHER MODALS -->
+    <!-- AVATAR MODAL -->
     <div id="avatarModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('avatarModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('avatarModal')">&times;</span>
             <h3>Change Profile Picture</h3>
             <input type="file" id="avatarFileInput" accept="image/*" class="input-box">
+            <p style="color:#aaa; font-size:0.8rem; margin-bottom:10px;">Minimum resolution: 500x500 pixels for best quality</p>
             <button class="action-btn btn-primary" onclick="uploadAvatar()">Upload</button>
             <div id="avatarUploadStatus" style="margin-top:10px;"></div>
         </div>
     </div>
 
+    <!-- CHANGE NAME MODAL -->
     <div id="changeNameModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('changeNameModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('changeNameModal')">&times;</span>
             <h3>Change Display Name</h3>
             <input type="text" id="newNameInput" class="input-box" placeholder="Enter new name">
             <button class="action-btn btn-primary" onclick="updateDisplayName()">Update Name</button>
@@ -1431,9 +2219,10 @@
         </div>
     </div>
 
+    <!-- WALLPAPER MODAL -->
     <div id="wallpaperModal" class="modal">
         <div class="modal-content" style="max-width: 550px;">
-            <span class="close-modal" onclick="document.getElementById('wallpaperModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('wallpaperModal')">&times;</span>
             <h3>Choose Chat Wallpaper</h3>
             <p style="color:#aaa; margin-bottom:10px;">Select a wallpaper for your chat background</p>
             <div class="wallpaper-grid" id="wallpaperGrid"></div>
@@ -1442,26 +2231,10 @@
         </div>
     </div>
 
-    <div id="giftStoreModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('giftStoreModal').style.display='none'">&times;</span>
-            <h2 style="color:#f1c40f;">Gift Card Store</h2>
-            <p style="color:#aaa;">Coming soon!</p>
-        </div>
-    </div>
-
-    <div id="depositModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('depositModal').style.display='none'">&times;</span>
-            <h3>Deposit</h3>
-            <p style="color:#aaa;">Send BTC to: bc1qm3mfz4ytpkthcdcl0fep3ndzq2g3jxme4de05p</p>
-            <button class="action-btn" onclick="copyAddress()">Copy Address</button>
-        </div>
-    </div>
-
+    <!-- WITHDRAW MODAL -->
     <div id="withdrawModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('withdrawModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('withdrawModal')">&times;</span>
             <h3>Withdraw</h3>
             <p style="color:#aaa;">VIP 4+ required</p>
             <input type="number" id="withdrawAmount" class="input-box" placeholder="Amount">
@@ -1470,9 +2243,10 @@
         </div>
     </div>
 
+    <!-- BUY MODAL -->
     <div id="buyModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('buyModal').style.display='none'">&times;</span>
+            <span class="close-modal" onclick="closeModal('buyModal')">&times;</span>
             <h3>Checkout</h3>
             <p id="buyProductName"></p>
             <input type="text" id="shipAddress" class="input-box" placeholder="Address">
@@ -1481,13 +2255,14 @@
         </div>
     </div>
 
+    <!-- SUCCESS MODAL -->
     <div id="successModal" class="modal">
         <div class="modal-content" style="background: linear-gradient(135deg,#c0392b,#8e44ad); color:white;">
             <i class="fas fa-check-circle" style="font-size:3rem;"></i>
             <h2>Purchase Successful!</h2>
             <p>Tracking Code:</p>
             <div id="finalTrackingCode" style="background:rgba(0,0,0,0.3); padding:10px;"></div>
-            <button class="action-btn" onclick="document.getElementById('successModal').style.display='none'">Close</button>
+            <button class="action-btn" onclick="closeModal('successModal')">Close</button>
         </div>
     </div>
 
@@ -1508,6 +2283,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Hidden audio elements -->
+    <audio id="sendMessageSound" src="https://close-plum-wlt1tch4ep.edgeone.app/floraphonic-happy-pop-1-185286.mp3" preload="auto"></audio>
+    <audio id="notificationSound" src="https://obliged-beige-gdsrsmjvj7.edgeone.app/universfield-new-notification-032-480570.mp3" preload="auto"></audio>
+    <audio id="errorSound" src="https://pleased-maroon-xnqs8ftowb.edgeone.app/u_31vnwfmzt6-error-126627.mp3" preload="auto"></audio>
 
     <script type="module">
         // ========== FIREBASE ==========
@@ -1538,184 +2318,31 @@
         const ADMIN_EMAIL = "moxxxtiox@gmail.com";
         const defaultAvatar = 'https://i.ibb.co/gZqjS62p/Gemini-Generated-Image-lh3nyulh3nyulh3n.png';
 
-        // ========== GLOBAL MUSIC VARIABLES ==========
-        let globalAudio = null;
-        let isMusicPlaying = false;
+        // ========== SOUND EFFECTS ==========
+        const sendSound = document.getElementById('sendMessageSound');
+        const notifSound = document.getElementById('notificationSound');
+        const errorSound = document.getElementById('errorSound');
 
-        // ========== DEBUG LOG FUNCTION ==========
-        function debugLog(...args) {
-            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
-            console.log('[DEBUG]', ...args);
-            const panel = document.getElementById('debugPanel');
-            if (panel) {
-                panel.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${msg}</div>`;
-                panel.scrollTop = panel.scrollHeight;
-            }
+        function playSendSound() {
+            sendSound.currentTime = 0;
+            sendSound.play().catch(e => console.log('Send sound play failed', e));
         }
-        window.toggleDebug = () => {
-            const panel = document.getElementById('debugPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        };
-
-        // ========== LOAD GLOBAL MUSIC FROM ADMIN SETTINGS ==========
-        async function loadGlobalMusic() {
-            try {
-                const musicDoc = await getDoc(doc(db, 'settings', 'music'));
-                if (musicDoc.exists()) {
-                    const { url, autoplay } = musicDoc.data();
-                    if (url && autoplay) {
-                        // Create audio element if it doesn't exist
-                        if (!globalAudio) {
-                            globalAudio = new Audio(url);
-                            globalAudio.loop = true;
-                            globalAudio.volume = 0.3; // Default volume
-                            
-                            // Add event listeners
-                            globalAudio.addEventListener('play', () => {
-                                isMusicPlaying = true;
-                                updateMusicButton();
-                            });
-                            globalAudio.addEventListener('pause', () => {
-                                isMusicPlaying = false;
-                                updateMusicButton();
-                            });
-                            globalAudio.addEventListener('ended', () => {
-                                isMusicPlaying = false;
-                                updateMusicButton();
-                            });
-                        }
-                        
-                        // Try to play (browsers may block autoplay)
-                        try {
-                            await globalAudio.play();
-                            console.log('Global music autoplay started');
-                            document.getElementById('musicFloat').style.display = 'flex';
-                        } catch (e) {
-                            console.log('Autoplay prevented by browser:', e);
-                            // Show button but don't play
-                            document.getElementById('musicFloat').style.display = 'flex';
-                        }
-                    } else if (url) {
-                        // Music URL exists but autoplay is off, just show the button
-                        if (!globalAudio) {
-                            globalAudio = new Audio(url);
-                            globalAudio.loop = true;
-                            globalAudio.volume = 0.3;
-                            
-                            globalAudio.addEventListener('play', () => {
-                                isMusicPlaying = true;
-                                updateMusicButton();
-                            });
-                            globalAudio.addEventListener('pause', () => {
-                                isMusicPlaying = false;
-                                updateMusicButton();
-                            });
-                            globalAudio.addEventListener('ended', () => {
-                                isMusicPlaying = false;
-                                updateMusicButton();
-                            });
-                        }
-                        document.getElementById('musicFloat').style.display = 'flex';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading global music:', error);
-            }
+        function playNotificationSound() {
+            notifSound.currentTime = 0;
+            notifSound.play().catch(e => console.log('Notification sound play failed', e));
+        }
+        function playErrorSound() {
+            errorSound.currentTime = 0;
+            errorSound.play().catch(e => console.log('Error sound play failed', e));
         }
 
-        // ========== TOGGLE GLOBAL MUSIC ==========
-        window.toggleGlobalMusic = async () => {
-            if (!globalAudio) {
-                // Try to load music settings again
-                await loadGlobalMusic();
-                if (!globalAudio) {
-                    Toastify({ text: "No music URL configured by admin", backgroundColor: "#e74c3c" }).showToast();
-                    return;
-                }
-            }
-            
-            if (isMusicPlaying) {
-                globalAudio.pause();
-                Toastify({ text: "Music paused", backgroundColor: "#8e44ad" }).showToast();
-            } else {
-                try {
-                    await globalAudio.play();
-                    Toastify({ text: "Music playing", backgroundColor: "#2ecc71" }).showToast();
-                } catch (e) {
-                    console.error('Error playing music:', e);
-                    Toastify({ text: "Could not play music", backgroundColor: "#e74c3c" }).showToast();
-                }
-            }
-        };
+        // ========== PROFILE MUSIC VARIABLES ==========
+        let profileAudio = null;
+        let isProfileMusicPlaying = false;
 
-        // ========== UPDATE MUSIC BUTTON UI ==========
-        function updateMusicButton() {
-            const btn = document.getElementById('musicFloat');
-            if (isMusicPlaying) {
-                btn.classList.add('playing');
-                btn.innerHTML = '<i class="fas fa-pause"></i>';
-            } else {
-                btn.classList.remove('playing');
-                btn.innerHTML = '<i class="fas fa-music"></i>';
-            }
-        }
-
-        // ========== WALLPAPERS ==========
-        const wallpapers = [
-            { id: 'moving1', name: 'Moving Waves 1', url: 'https://premier-gold-wthio10a6v.edgeone.app/moving%20walaksb.mp4', moving: true },
-            { id: 'moving2', name: 'Moving Waves 2', url: 'https://colourful-violet-jqpqyp5emd.edgeone.app/moving%20sggsgs.mp4', moving: true },
-            { id: 'moving3', name: 'Moving Waves 3', url: 'https://parliamentary-coral-phidn8dyzg.edgeone.app/moving%20whevejd.mp4', moving: true },
-            { id: 'moving4', name: 'Moving Waves 4', url: 'https://worthy-orange-z8l14p8cm6.edgeone.app/moving%20walsnsn.mp4', moving: true },
-            { id: 'moving5', name: 'Video Guru 1', url: 'https://marginal-lime-nng2c9cp9c.edgeone.app/Video.Guru_20260219_171036307.mp4', moving: true },
-            { id: 'moving6', name: 'Video Guru 2', url: 'https://unaware-plum-g4qh9rcxuh.edgeone.app/Video.Guru_20260219_172003785.mp4', moving: true },
-            { id: 'moving7', name: 'Moving AGSH', url: 'https://husky-lime-nrtzwo5pqd.edgeone.app/moving%20wallpaper%20agsh.mp4', moving: true },
-            { id: 'moving8', name: 'Moving AA', url: 'https://adorable-blush-gwojhzc0sx.edgeone.app/moving%20wallpaper%20aa.mp4', moving: true },
-            { id: 'static1', name: 'Purple Abstract', url: 'https://furious-peach-wlmhvgxcob.edgeone.app/images%20-%202026-02-19T160551.567.jpeg', moving: false },
-            { id: 'static2', name: 'Blue Abstract', url: 'https://average-harlequin-e4re4mwodq.edgeone.app/images%20-%202026-02-19T160543.856.jpeg', moving: false },
-            { id: 'static3', name: 'Sunset Mountains', url: 'https://i.ibb.co/yF4NS12s/images-2026-02-19-T160448-732.jpg', moving: false },
-            { id: 'static4', name: 'Forest Path', url: 'https://i.ibb.co/fGD3FNV1/images-2026-02-19-T160430-065.jpg', moving: false },
-            { id: 'static5', name: 'Ocean Waves', url: 'https://i.ibb.co/FbQ4wpqR/images-2026-02-19-T160344-114.jpg', moving: false },
-            { id: 'static6', name: 'Abstract Art', url: 'https://i.ibb.co/KpX2hZBV/71-T8m-Z3u-HL.jpg', moving: false },
-            { id: 'static7', name: '3D Wallpaper', url: 'https://i.ibb.co/VnNfjRB/3d-walpaper.jpg', moving: false },
-            { id: 'static8', name: 'Live Wallpaper', url: 'https://i.ibb.co/1BwNFRW/live-walpaper.jpg', moving: false },
-            { id: 'static9', name: 'Porsche AI', url: 'https://i.ibb.co/5xKL6h2X/porsch-a-i.png', moving: false },
-            { id: 'static10', name: 'Indigenous Person 1', url: 'https://i.ibb.co/4ZjTwg1J/portrait-3d-cartoon-indigenous-person-1.jpg', moving: false },
-            { id: 'static11', name: 'Indigenous Person 2', url: 'https://i.ibb.co/C5Y8qg8r/portrait-3d-cartoon-indigenous-person.jpg', moving: false },
-            { id: 'static12', name: 'Karola G', url: 'https://i.ibb.co/MxS184g9/pexels-karola-g-5713581.jpg', moving: false },
-            { id: 'static13', name: 'Alien World 3', url: 'https://i.ibb.co/sY8CWxR/cheerful-3d-alien-world-3.jpg', moving: false },
-            { id: 'static14', name: 'Isolated House', url: 'https://i.ibb.co/RTFwFzRd/digital-art-isolated-house-1.jpg', moving: false },
-            { id: 'static15', name: 'Fantasy Lamp', url: 'https://i.ibb.co/Xxy4z8vj/lamp-with-fantasy-futuristic-design.jpg', moving: false },
-            { id: 'static16', name: 'Shiny Bubbles', url: 'https://i.ibb.co/6cpY4XNd/shiny-bubbles-wallpaper.jpg', moving: false },
-            { id: 'static17', name: 'Alien World 1', url: 'https://i.ibb.co/sdj8WfWJ/cheerful-3d-alien-world-1.jpg', moving: false },
-            { id: 'static18', name: 'Alien World', url: 'https://i.ibb.co/pBjCVVbg/cheerful-3d-alien-world.jpg', moving: false },
-            { id: 'static19', name: 'Astronaut Diving', url: 'https://i.ibb.co/5WNBTwz2/astronaut-diving-digital-art.jpg', moving: false },
-            { id: 'static20', name: 'Alien World 2', url: 'https://i.ibb.co/wNzDw6Fc/cheerful-3d-alien-world-2.jpg', moving: false },
-            { id: 'static21', name: 'Cute Animals Christmas', url: 'https://i.ibb.co/G4mYkfFZ/3d-cute-animals-christmas.jpg', moving: false },
-            { id: 'static22', name: 'Half Robot Tiger', url: 'https://i.ibb.co/kgBffwrh/futuristic-half-robot-tiger-nature-1.jpg', moving: false }
-        ];
-
-        let selectedWallpaper = wallpapers.find(w => w.id === 'static17') || wallpapers[0];
-        const preloadedVideos = new Map();
-
-        function preloadWallpapers() {
-            const toPreload = wallpapers.slice(0, 10);
-            toPreload.forEach(w => {
-                if (w.moving) {
-                    const video = document.createElement('video');
-                    video.src = w.url;
-                    video.preload = 'auto';
-                    video.muted = true;
-                    video.playsInline = true;
-                    video.style.display = 'none';
-                    document.body.appendChild(video);
-                    video.load();
-                    preloadedVideos.set(w.url, video);
-                } else {
-                    const img = new Image();
-                    img.src = w.url;
-                }
-            });
-        }
+        // ========== WALLPAPERS (now from Firestore) ==========
+        let wallpapers = [];
+        let selectedWallpaper = null;
 
         // ========== GLOBAL VARIABLES ==========
         let currentUser = null;
@@ -1732,6 +2359,40 @@
         let commentUnsubscribes = new Map();
         let celebrities = [];
         let adminUserData = null;
+        let transactions = [];
+        let transactionsUnsubscribe = null;
+        let followersUnsubscribe = null;
+        let followingUnsubscribe = null;
+        let wallpapersUnsubscribe = null;
+
+        // Gift store variables
+        let currentPurchaseCard = null;
+        let blackhawkInterval = null;
+
+        // Follow state for popup
+        let currentPopupUserId = null;
+        let currentPopupUserData = null;
+        let currentPopupIsCeleb = false;
+
+        // Gift card list for store (min/max updated)
+        const giftCards = [
+            { name: "Visa Gift Card", icon: "fab fa-cc-visa", min: 50, max: 2000 },
+            { name: "Mastercard Gift Card", icon: "fab fa-cc-mastercard", min: 50, max: 2000 },
+            { name: "American Express", icon: "fab fa-cc-amex", min: 50, max: 2000 },
+            { name: "Amazon Gift Card", icon: "fab fa-amazon", min: 50, max: 2000 },
+            { name: "Walmart Gift Card", icon: "fas fa-store", min: 50, max: 2000 },
+            { name: "Target Gift Card", icon: "fas fa-bullseye", min: 50, max: 2000 },
+            { name: "eBay Gift Card", icon: "fab fa-ebay", min: 50, max: 2000 },
+            { name: "Steam Gift Card", icon: "fab fa-steam", min: 50, max: 2000 },
+            { name: "Google Play", icon: "fab fa-google-play", min: 50, max: 2000 },
+            { name: "Apple / iTunes", icon: "fab fa-apple", min: 50, max: 2000 },
+            { name: "Razer Gold", icon: "fas fa-dragon", min: 50, max: 2000 },
+            { name: "PlayStation", icon: "fab fa-playstation", min: 50, max: 2000 },
+            { name: "Xbox", icon: "fab fa-xbox", min: 50, max: 2000 },
+            { name: "Roblox", icon: "fas fa-gamepad", min: 50, max: 2000 },
+            { name: "Nintendo eShop", icon: "fas fa-gamepad", min: 50, max: 2000 },
+            { name: "Starbucks", icon: "fas fa-coffee", min: 50, max: 2000 }
+        ];
 
         // ========== UTILITY ==========
         function formatTimeAgo(timestamp) {
@@ -1771,13 +2432,14 @@
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const pass = document.getElementById('regPassword').value;
-            if (!name || !email || !pass) return Toastify({ text: "Fill all fields" }).showToast();
+            if (!name || !email || !pass) {
+                playErrorSound();
+                return Toastify({ text: "Fill all fields" }).showToast();
+            }
             document.getElementById('spinner').style.display = 'flex';
             document.getElementById('spinnerText').innerText = 'Creating account...';
-            debugLog('Starting registration for', email);
             try {
                 const cred = await createUserWithEmailAndPassword(auth, email, pass);
-                debugLog('User created:', cred.user.uid);
                 await setDoc(doc(db, 'users', cred.user.uid), {
                     fullName: name,
                     email,
@@ -1786,13 +2448,13 @@
                     avatar: defaultAvatar,
                     wallpaper: 'static17',
                     uploadCount: 0,
-                    lastUploadDate: ''
+                    lastUploadDate: '',
+                    followers: [],
+                    following: []
                 });
-                debugLog('User document created');
                 Toastify({ text: "Account created", backgroundColor: "green" }).showToast();
             } catch (e) {
-                console.error("Registration error:", e);
-                debugLog('Registration error:', e.message);
+                playErrorSound();
                 Toastify({ text: e.message, backgroundColor: "#e74c3c" }).showToast();
             } finally {
                 document.getElementById('spinner').style.display = 'none';
@@ -1802,16 +2464,16 @@
         window.loginUser = async function() {
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
-            if (!email || !pass) return Toastify({ text: "Enter email and password" }).showToast();
+            if (!email || !pass) {
+                playErrorSound();
+                return Toastify({ text: "Enter email and password" }).showToast();
+            }
             document.getElementById('spinner').style.display = 'flex';
             document.getElementById('spinnerText').innerText = 'Logging in...';
-            debugLog('Attempting login for', email);
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                debugLog('Login successful');
             } catch (e) {
-                console.error("Login error:", e);
-                debugLog('Login error:', e.message);
+                playErrorSound();
                 Toastify({ text: e.message, backgroundColor: "#e74c3c" }).showToast();
             } finally {
                 document.getElementById('spinner').style.display = 'none';
@@ -1821,6 +2483,19 @@
         window.logout = () => signOut(auth);
 
         // ========== WALLPAPER FUNCTIONS ==========
+        function loadWallpapers() {
+            if (wallpapersUnsubscribe) wallpapersUnsubscribe();
+            const q = query(collection(db, 'wallpapers'));
+            wallpapersUnsubscribe = onSnapshot(q, (snap) => {
+                wallpapers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                if (wallpapers.length === 0) {
+                    wallpapers = [{ id: 'static17', name: 'Default', url: 'https://res.cloudinary.com/dnkll2fha/image/upload/f_auto,q_auto,w_800/v1/wallpapers/static17', moving: false }];
+                }
+                selectedWallpaper = wallpapers.find(w => w.id === (currentUserData?.wallpaper || 'static17')) || wallpapers[0];
+                renderWallpaperGrid();
+            });
+        }
+
         function renderWallpaperGrid() {
             const grid = document.getElementById('wallpaperGrid');
             if (!grid) return;
@@ -1844,8 +2519,6 @@
 
         window.openWallpaperModal = function() {
             document.getElementById('settingsMenu').classList.remove('active');
-            const savedId = currentUserData?.wallpaper || 'static17';
-            selectedWallpaper = wallpapers.find(w => w.id === savedId) || wallpapers.find(w => w.id === 'static17') || wallpapers[0];
             renderWallpaperGrid();
             document.getElementById('wallpaperModal').style.display = 'flex';
             document.getElementById('wallpaperStatus').textContent = '';
@@ -1861,8 +2534,7 @@
                 document.getElementById('wallpaperModal').style.display = 'none';
                 Toastify({ text: "Wallpaper updated!" }).showToast();
             } catch (e) {
-                console.error("Save wallpaper error:", e);
-                debugLog('Save wallpaper error:', e.message);
+                playErrorSound();
                 status.textContent = 'Error: ' + e.message;
                 status.style.color = '#ff6b6b';
             }
@@ -1873,9 +2545,9 @@
             const imageEl = document.getElementById('chatImageBg');
             if (!videoEl || !imageEl) return;
             const wallpaperId = currentUserData?.wallpaper || 'static17';
-            const wallpaper = wallpapers.find(w => w.id === wallpaperId) || wallpapers.find(w => w.id === 'static17') || wallpapers[0];
+            const wallpaper = wallpapers.find(w => w.id === wallpaperId) || wallpapers[0];
             
-            if (wallpaper.moving) {
+            if (wallpaper?.moving) {
                 videoEl.style.display = 'block';
                 imageEl.style.display = 'none';
                 videoEl.src = wallpaper.url;
@@ -1885,7 +2557,7 @@
                 videoEl.style.display = 'none';
                 videoEl.pause();
                 imageEl.style.display = 'block';
-                imageEl.style.backgroundImage = `url('${wallpaper.url}')`;
+                imageEl.style.backgroundImage = `url('${wallpaper?.url}')`;
                 imageEl.classList.add('moving');
             }
         }
@@ -1915,6 +2587,7 @@
         window.updateDisplayName = async function() {
             const newName = document.getElementById('newNameInput').value.trim();
             if (!newName) {
+                playErrorSound();
                 document.getElementById('nameUpdateStatus').textContent = 'Please enter a name';
                 document.getElementById('nameUpdateStatus').style.color = '#ff6b6b';
                 return;
@@ -1930,8 +2603,7 @@
                 document.getElementById('changeNameModal').style.display = 'none';
                 Toastify({ text: "Name updated successfully!", backgroundColor: "green" }).showToast();
             } catch (e) {
-                console.error("Name update error:", e);
-                debugLog('Name update error:', e.message);
+                playErrorSound();
                 status.textContent = 'Error: ' + e.message;
                 status.style.color = '#ff6b6b';
             }
@@ -1942,8 +2614,6 @@
             if (!currentUser) return;
             if (notificationsUnsubscribe) notificationsUnsubscribe();
 
-            debugLog('Setting up notifications listener for user', currentUser.uid);
-
             const q = query(
                 collection(db, 'notifications'),
                 where('userId', '==', currentUser.uid)
@@ -1953,11 +2623,9 @@
                 const notifs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 notifs.sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
                 unreadCount = notifs.filter(n => !n.read).length;
-                debugLog('Notifications updated:', notifs.length, 'unread:', unreadCount);
                 updateNotificationUI(notifs);
             }, (error) => {
                 console.error('Notifications listener error:', error);
-                debugLog('Notifications listener error:', error.message);
             });
         }
 
@@ -1993,6 +2661,9 @@
                     </div>
                 `;
             }).join('');
+            if (unreadCount > 0) {
+                playNotificationSound();
+            }
         }
 
         window.openNotification = async (id, link) => {
@@ -2036,13 +2707,11 @@
         function loadRecentChats() {
             if (!currentUser) return;
             if (recentChatsUnsubscribe) recentChatsUnsubscribe();
-            debugLog('Setting up recent chats listener');
             const q = query(
                 collection(db, 'userChats', currentUser.uid, 'chats'),
                 orderBy('lastTimestamp', 'desc')
             );
             recentChatsUnsubscribe = onSnapshot(q, (snapshot) => {
-                debugLog('Recent chats snapshot received, size:', snapshot.size);
                 const list = document.getElementById('recentChatsList');
                 if (!list) return;
                 if (snapshot.empty) {
@@ -2056,14 +2725,18 @@
                     const unread = chat.unreadCount || 0;
                     const timeAgo = formatTimeAgo(chat.lastTimestamp);
                     const lastMsg = chat.lastMessage || 'Tap to start chatting';
+                    const verifiedIcon = chat.isCeleb ? '<i class="fas fa-check-circle verified-badge"></i>' : '';
                     html += `
                         <div class="recent-chat-item" onclick="openChatFromRecent('${chatId}', '${chat.partnerName}', '${chat.partnerAvatar}', ${chat.isCeleb}, '${chat.partnerId}')">
                             <img src="${chat.partnerAvatar}" class="recent-chat-avatar" onerror="this.src='${defaultAvatar}'">
                             <div class="recent-chat-info">
-                                <div class="recent-chat-name">${chat.partnerName}</div>
+                                <div class="recent-chat-name">
+                                    ${chat.partnerName}
+                                    ${verifiedIcon}
+                                </div>
                                 <div class="recent-chat-message">${lastMsg}</div>
+                                <div class="recent-chat-time">${timeAgo}</div>
                             </div>
-                            <div class="recent-chat-time">${timeAgo}</div>
                             ${unread > 0 ? `<span class="unread-badge">${unread}</span>` : ''}
                         </div>
                     `;
@@ -2071,12 +2744,10 @@
                 list.innerHTML = html;
             }, (error) => {
                 console.error('Recent chats listener error:', error);
-                debugLog('Recent chats listener error:', error.message);
             });
         }
 
         window.openChatFromRecent = function(chatId, name, avatar, isCeleb, partnerId) {
-            debugLog('Opening chat from recent:', chatId, name, isCeleb);
             updateDoc(doc(db, 'userChats', currentUser.uid, 'chats', chatId), { unreadCount: 0 });
             if (isCeleb) {
                 openCelebChat(name, avatar);
@@ -2090,7 +2761,6 @@
             const q = query(collection(db, 'celebrities'));
             const snap = await getDocs(q);
             celebrities = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            debugLog('Celebrities loaded:', celebrities.length);
             renderCelebs();
         }
 
@@ -2098,7 +2768,10 @@
         window.addCelebrity = async function() {
             const name = document.getElementById('newCelebName').value.trim();
             const img = document.getElementById('newCelebImg').value.trim();
-            if (!name || !img) return Toastify({ text: "Enter name and image URL" }).showToast();
+            if (!name || !img) {
+                playErrorSound();
+                return Toastify({ text: "Enter name and image URL" }).showToast();
+            }
             await addDoc(collection(db, 'celebrities'), { name, img });
             document.getElementById('newCelebName').value = '';
             document.getElementById('newCelebImg').value = '';
@@ -2110,15 +2783,41 @@
             const grid = document.getElementById('allCelebGrid');
             const home = document.getElementById('homeCelebList');
             if (!grid || !home) return;
-            grid.innerHTML = celebrities.map(c => `<div class="celeb-card" onclick="openCelebChat('${c.name}', '${c.img}')"><img src="${c.img}" class="celeb-img" onerror="this.src='${defaultAvatar}'"><div class="celeb-name">${c.name} <i class="fas fa-check-circle verified-badge"></i></div></div>`).join('');
-            home.innerHTML = celebrities.slice(0, 8).map(c => `<div class="celeb-card" onclick="openCelebChat('${c.name}', '${c.img}')"><img src="${c.img}" class="celeb-img" onerror="this.src='${defaultAvatar}'"><div class="celeb-name">${c.name}</div></div>`).join('');
+            
+            grid.innerHTML = celebrities.map(c => `
+                <div class="celeb-card" onclick="openCelebPopup('${c.id}', '${c.name}', '${c.img}')">
+                    <img src="${c.img}" class="celeb-img" onerror="this.src='${defaultAvatar}'">
+                    <div class="celeb-name">${c.name} <i class="fas fa-check-circle verified-badge"></i></div>
+                </div>
+            `).join('');
+            
+            home.innerHTML = celebrities.slice(0, 8).map(c => `
+                <div class="celeb-card" onclick="openCelebChat('${c.name}', '${c.img}')">
+                    <img src="${c.img}" class="celeb-img" onerror="this.src='${defaultAvatar}'">
+                    <div class="celeb-name">${c.name} <i class="fas fa-check-circle verified-badge"></i></div>
+                </div>
+            `).join('');
         }
 
-        // ========== USERS ==========
+        // ========== CELEBRITY POPUP (follow counts editable later by admin) ==========
+        window.openCelebPopup = (celebId, name, avatar) => {
+            currentPopupUserId = celebId;
+            currentPopupIsCeleb = true;
+            document.getElementById('popupAvatar').src = avatar || defaultAvatar;
+            document.getElementById('popupName').innerText = name;
+            document.getElementById('popupVip').innerHTML = 'Celebrity';
+            document.getElementById('popupFollowers').innerText = '0'; // Placeholder, admin can update later
+            document.getElementById('popupFollowing').innerText = '0';
+            const btn = document.getElementById('popupFollowBtn');
+            btn.innerText = 'Follow'; // Placeholder, actual follow not implemented for celebs yet
+            btn.style.display = 'none'; // Hide follow for now, can be enabled later
+            document.getElementById('userPopupModal').style.display = 'flex';
+        };
+
+        // ========== USERS (Find Friends) ==========
         function loadUsers() {
             const q = query(collection(db, 'users'));
             onSnapshot(q, (snap) => {
-                debugLog('Users snapshot received, size:', snap.size);
                 const list = document.getElementById('userList');
                 if (!list) return;
                 
@@ -2131,51 +2830,149 @@
                     .filter(d => d.id !== currentUser.uid)
                     .map(d => {
                         const u = d.data();
-                        return `<div class="celeb-card" style="display:flex; align-items:center; gap:15px; text-align:left; padding:15px; cursor:pointer;" onclick="openUserChat('${u.fullName}', '${u.avatar}', '${d.id}')">
-                            <img src="${u.avatar}" style="width:50px; height:50px; border-radius:50%;" onerror="this.src='${defaultAvatar}'">
-                            <div style="flex:1;"><div style="font-weight:600;">${u.fullName}</div><div style="font-size:0.8rem; color:#aaa;">VIP ${u.vipLevel || 1}</div></div>
-                            <i class="fas fa-comment-dots" style="color:#8e44ad;"></i>
-                        </div>`;
+                        const isFollowing = currentUserData?.following?.includes(d.id);
+                        return `
+                            <div class="friend-card" onclick="openUserPopup('${d.id}', '${u.fullName}', '${u.avatar}', ${u.vipLevel || 1}, ${u.followers?.length || 0}, ${u.following?.length || 0})">
+                                <img src="${u.avatar || defaultAvatar}" class="friend-avatar" onerror="this.src='${defaultAvatar}'">
+                                <div class="friend-info">
+                                    <div class="friend-name">${u.fullName}</div>
+                                    <div class="friend-vip">VIP ${u.vipLevel || 1}</div>
+                                </div>
+                                <button class="follow-btn ${isFollowing ? 'following' : ''}" onclick="event.stopPropagation(); toggleFollow('${d.id}', this)">${isFollowing ? 'Following' : 'Follow'}</button>
+                            </div>
+                        `;
                     }).join('');
             }, (error) => {
                 console.error('Users listener error:', error);
-                debugLog('Users listener error:', error.message);
             });
         }
 
+        // ========== FOLLOW SYSTEM ==========
+        window.toggleFollow = async (targetUserId, btn) => {
+            if (!currentUser) return;
+            const userRef = doc(db, 'users', currentUser.uid);
+            const targetRef = doc(db, 'users', targetUserId);
+            
+            const isFollowing = currentUserData.following?.includes(targetUserId);
+            
+            if (isFollowing) {
+                await updateDoc(userRef, {
+                    following: arrayRemove(targetUserId)
+                });
+                await updateDoc(targetRef, {
+                    followers: arrayRemove(currentUser.uid)
+                });
+                currentUserData.following = currentUserData.following?.filter(id => id !== targetUserId) || [];
+                btn.innerText = 'Follow';
+                btn.classList.remove('following');
+            } else {
+                await updateDoc(userRef, {
+                    following: arrayUnion(targetUserId)
+                });
+                await updateDoc(targetRef, {
+                    followers: arrayUnion(currentUser.uid)
+                });
+                currentUserData.following = [...(currentUserData.following || []), targetUserId];
+                btn.innerText = 'Following';
+                btn.classList.add('following');
+            }
+        };
+
+        // Load followers/following for current user
+        function loadFollowStats() {
+            if (!currentUser) return;
+            const userRef = doc(db, 'users', currentUser.uid);
+            onSnapshot(userRef, (doc) => {
+                const data = doc.data();
+                document.getElementById('profileFollowers').innerText = data.followers?.length || 0;
+                document.getElementById('profileFollowing').innerText = data.following?.length || 0;
+            });
+        }
+
+        // User popup
+        window.openUserPopup = (userId, name, avatar, vip, followers, following) => {
+            currentPopupUserId = userId;
+            currentPopupIsCeleb = false;
+            currentPopupUserData = { name, avatar, vip, followers, following };
+            document.getElementById('popupAvatar').src = avatar || defaultAvatar;
+            document.getElementById('popupName').innerText = name;
+            document.getElementById('popupVip').innerHTML = `VIP ${vip}`;
+            document.getElementById('popupFollowers').innerText = followers;
+            document.getElementById('popupFollowing').innerText = following;
+            const isFollowing = currentUserData.following?.includes(userId);
+            const btn = document.getElementById('popupFollowBtn');
+            btn.innerText = isFollowing ? 'Following' : 'Follow';
+            btn.classList.toggle('following', isFollowing);
+            btn.style.display = 'inline-block';
+            document.getElementById('userPopupModal').style.display = 'flex';
+        };
+
+        window.toggleFollowFromPopup = async () => {
+            if (currentPopupIsCeleb) return;
+            const btn = document.getElementById('popupFollowBtn');
+            await toggleFollow(currentPopupUserId, btn);
+            const newFollowing = btn.innerText === 'Following';
+            const followers = parseInt(document.getElementById('popupFollowers').innerText);
+            document.getElementById('popupFollowers').innerText = newFollowing ? followers + 1 : followers - 1;
+        };
+
+        window.openUserChatFromPopup = () => {
+            if (currentPopupIsCeleb) {
+                openCelebChat(currentPopupUserData?.name || document.getElementById('popupName').innerText, document.getElementById('popupAvatar').src);
+            } else {
+                openUserChat(currentPopupUserData?.name || document.getElementById('popupName').innerText, document.getElementById('popupAvatar').src, currentPopupUserId);
+            }
+            closeUserPopup();
+        };
+
+        window.closeUserPopup = () => {
+            document.getElementById('userPopupModal').style.display = 'none';
+            currentPopupUserId = null;
+            currentPopupUserData = null;
+            currentPopupIsCeleb = false;
+        };
+
         // ========== CHAT OPENERS ==========
         window.openCelebChat = function(name, avatar) {
-            debugLog('Opening private celebrity chat with:', name);
             isCelebChat = true;
             const privateChatId = `celeb_${name.replace(/[^a-zA-Z0-9]/g, '_')}_${currentUser.uid}`;
             openChat(name, avatar, null, true, privateChatId);
         };
 
         window.openUserChat = function(name, avatar, uid) {
-            debugLog('Opening user chat with:', name, uid);
             isCelebChat = false;
             openChat(name, avatar, uid, false, null);
         };
 
         function openChat(name, avatar, uid, isCeleb, predefinedChatId = null) {
+            if (chatUnsubscribe) {
+                chatUnsubscribe();
+                chatUnsubscribe = null;
+            }
+            document.getElementById('messageContainer').innerHTML = '';
+            document.getElementById('msgInput').value = '';
+
             document.getElementById('chatName').innerText = name;
             document.getElementById('chatAvatar').src = avatar;
+
+            const verifiedIcon = document.getElementById('chatVerifiedIcon');
+            if (verifiedIcon) {
+                verifiedIcon.style.display = isCeleb ? 'inline-block' : 'none';
+            }
+
             document.getElementById('chatInterface').style.display = 'flex';
             applyChatWallpaper();
-            if (chatUnsubscribe) chatUnsubscribe();
 
             if (isCeleb) {
                 currentChatId = predefinedChatId || `celeb_${name.replace(/[^a-zA-Z0-9]/g, '_')}_${currentUser.uid}`;
                 currentChatPartner = { name, avatar, isCeleb: true, partnerId: name };
                 document.getElementById('callButtons').style.display = 'none';
-                debugLog('Private celebrity chat ID:', currentChatId);
             } else {
                 currentChatId = [currentUser.uid, uid].sort().join('_');
                 currentChatPartner = { name, avatar, uid, isCeleb: false, partnerId: uid };
                 document.getElementById('callButtons').style.display = 'flex';
                 document.getElementById('audioCallBtn').onclick = () => startCall('audio', uid, name, avatar);
                 document.getElementById('videoCallBtn').onclick = () => startCall('video', uid, name, avatar);
-                debugLog('User chat ID:', currentChatId);
             }
 
             setDoc(doc(db, 'userChats', currentUser.uid, 'chats', currentChatId), {
@@ -2186,14 +2983,12 @@
                 lastTimestamp: Date.now(),
             }, { merge: true }).catch(err => {
                 console.error('Error creating recent chat:', err);
-                debugLog('Error creating recent chat:', err.message);
             });
 
-            updateDoc(doc(db, 'userChats', currentUser.uid, 'chats', currentChatId), { unreadCount: 0 }).catch(() => { });
+            updateDoc(doc(db, 'userChats', currentUser.uid, 'chats', currentChatId), { unreadCount: 0 }).catch(() => {});
 
             const q = query(collection(db, 'chats', currentChatId, 'messages'), orderBy('timestamp'));
             chatUnsubscribe = onSnapshot(q, (snap) => {
-                debugLog('New messages in chat', currentChatId, 'count:', snap.size);
                 const cont = document.getElementById('messageContainer');
                 cont.innerHTML = snap.docs.map(d => {
                     const m = d.data();
@@ -2203,7 +2998,6 @@
                 cont.scrollTop = cont.scrollHeight;
             }, (error) => {
                 console.error('Chat messages listener error:', error);
-                debugLog('Chat messages listener error:', error.message);
             });
         }
 
@@ -2211,8 +3005,6 @@
             const inp = document.getElementById('msgInput');
             if (!inp.value.trim() || !currentChatId) return;
             const txt = inp.value.trim();
-
-            debugLog('Sending message to chat', currentChatId, 'text:', txt);
 
             await addDoc(collection(db, 'chats', currentChatId, 'messages'), {
                 sender: currentUser.uid,
@@ -2253,11 +3045,9 @@
                     read: false,
                     link: `user|${currentUserData?.fullName || 'User'}|${currentUserData?.avatar || defaultAvatar}|${currentUser.uid}`
                 });
-                debugLog('Notification sent to user', currentChatPartner.uid);
             }
 
             if (currentChatPartner.isCeleb) {
-                debugLog('Storing message in adminMessages for celebrity', currentChatPartner.name);
                 await addDoc(collection(db, 'adminMessages'), {
                     userId: currentUser.uid,
                     userName: currentUserData?.fullName || 'User',
@@ -2273,12 +3063,15 @@
 
             inp.value = '';
             inp.blur();
+            playSendSound();
         };
 
         window.closeChat = function() {
-            debugLog('Closing chat');
             document.getElementById('chatInterface').style.display = 'none';
-            if (chatUnsubscribe) chatUnsubscribe();
+            if (chatUnsubscribe) {
+                chatUnsubscribe();
+                chatUnsubscribe = null;
+            }
             currentChatId = null;
             currentChatPartner = null;
             const video = document.getElementById('chatVideo');
@@ -2294,8 +3087,14 @@
         window.processPurchase = async () => {
             const addr = document.getElementById('shipAddress').value;
             const phone = document.getElementById('shipPhone').value;
-            if (!addr || !phone) return Toastify({ text: "Fill all fields" }).showToast();
-            if (currentUserData.balance < selectedProduct.price) { Toastify({ text: "Insufficient funds" }).showToast(); return; }
+            if (!addr || !phone) {
+                playErrorSound();
+                return Toastify({ text: "Fill all fields" }).showToast();
+            }
+            if (currentUserData.balance < selectedProduct.price) {
+                playErrorSound();
+                Toastify({ text: "Insufficient funds" }).showToast(); return;
+            }
             document.getElementById('buyModal').style.display = 'none';
             document.getElementById('spinner').style.display = 'flex';
             document.getElementById('spinnerText').innerText = 'Processing purchase...';
@@ -2312,96 +3111,384 @@
                 trackingCode: track,
                 status: 'Processing'
             });
+            await addTransaction({
+                type: 'purchase',
+                amount: selectedProduct.price,
+                status: 'completed',
+                details: `Purchased ${selectedProduct.name}`
+            });
             document.getElementById('spinner').style.display = 'none';
             document.getElementById('finalTrackingCode').innerText = track;
             document.getElementById('successModal').style.display = 'flex';
         };
 
         window.attemptWithdrawal = () => {
-            if ((currentUserData.vipLevel || 1) < 4) { Toastify({ text: "VIP 4 required" }).showToast(); return; }
+            if ((currentUserData.vipLevel || 1) < 4) {
+                playErrorSound();
+                Toastify({ text: "VIP 4 required" }).showToast();
+                return;
+            }
             document.getElementById('withdrawModal').style.display = 'flex';
         };
         window.submitWithdrawal = async () => {
             const amt = parseFloat(document.getElementById('withdrawAmount').value);
             const addr = document.getElementById('withdrawAddress').value;
-            if (!amt || amt < 1 || !addr) return Toastify({ text: "Invalid amount or address" }).showToast();
-            if (amt > currentUserData.balance) return Toastify({ text: "Insufficient balance" }).showToast();
+            if (!amt || amt < 1 || !addr) {
+                playErrorSound();
+                return Toastify({ text: "Invalid amount or address" }).showToast();
+            }
+            if (amt > currentUserData.balance) {
+                playErrorSound();
+                return Toastify({ text: "Insufficient balance" }).showToast();
+            }
             await updateDoc(doc(db, 'users', currentUser.uid), { balance: increment(-amt) });
             currentUserData.balance -= amt;
             updateBalanceDisplay();
-            await addDoc(collection(db, 'withdrawals'), { userId: currentUser.uid, amount: amt, address: addr, timestamp: Date.now() });
+            await addDoc(collection(db, 'withdrawals'), { userId: currentUser.uid, amount: amt, address: addr, timestamp: Date.now(), status: 'pending' });
+            await addTransaction({
+                type: 'withdrawal',
+                amount: amt,
+                status: 'pending',
+                details: `Withdrawal request to ${addr}`
+            });
             document.getElementById('withdrawModal').style.display = 'none';
             Toastify({ text: "Withdrawal requested" }).showToast();
         };
 
-        window.openDepositModal = () => document.getElementById('depositModal').style.display = 'flex';
-        window.copyAddress = () => {
-            navigator.clipboard.writeText('bc1qm3mfz4ytpkthcdcl0fep3ndzq2g3jxme4de05p');
+        window.openDepositModal = () => {
+            document.getElementById('depositModal').style.display = 'flex';
+            selectDepositMethod('crypto');
+        };
+        window.copyAddress = (text) => {
+            navigator.clipboard.writeText(text);
             Toastify({ text: "Address copied" }).showToast();
         };
+        window.copyToClipboard = copyAddress;
 
-        // ========== AVATAR UPLOAD ==========
-        window.openAvatarModal = () => document.getElementById('avatarModal').style.display = 'flex';
-        window.uploadAvatar = async () => {
-            const file = document.getElementById('avatarFileInput').files[0];
-            if (!file) return Toastify({ text: "Select an image" }).showToast();
-            const status = document.getElementById('avatarUploadStatus');
-            status.innerText = 'Uploading...';
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', UPLOAD_PRESET);
+        // ========== DEPOSIT METHOD SELECTOR ==========
+        window.selectDepositMethod = (method) => {
+            const cryptoSection = document.getElementById('cryptoDepositSection');
+            const giftSection = document.getElementById('giftDepositSection');
+            const btns = document.querySelectorAll('.method-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (method === 'crypto') {
+                btns[0].classList.add('active');
+                cryptoSection.style.display = 'block';
+                giftSection.style.display = 'none';
+            } else {
+                btns[1].classList.add('active');
+                cryptoSection.style.display = 'none';
+                giftSection.style.display = 'block';
+            }
+        };
+
+        // ========== REDEEM GIFT CARD ==========
+        window.openRedeemModal = (cardType) => {
+            if (cardType) {
+                document.getElementById('redeemCardType').value = cardType;
+            }
+            document.getElementById('redeemModal').style.display = 'flex';
+        };
+
+        window.submitRedeemRequest = async () => {
+            const cardType = document.getElementById('redeemCardType').value;
+            const code = document.getElementById('redeemCode').value.trim();
+            const amount = parseFloat(document.getElementById('redeemAmount').value);
+            const statusDiv = document.getElementById('redeemStatus');
+
+            if (!cardType || !code || !amount) {
+                statusDiv.innerHTML = '<span class="error-message">Please fill all fields</span>';
+                return;
+            }
+            if (code.length !== 16) {
+                statusDiv.innerHTML = '<span class="error-message">Code must be 16 digits</span>';
+                return;
+            }
+
+            statusDiv.innerHTML = '<span class="warning-message">Submitting for verification...</span>';
+            document.getElementById('redeemSubmitBtn').disabled = true;
+
             try {
-                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error?.message);
-                await updateDoc(doc(db, 'users', currentUser.uid), { avatar: data.secure_url });
-                currentUserData.avatar = data.secure_url;
-                document.getElementById('profileAvatar').src = data.secure_url;
-                document.getElementById('homeProfileAvatar').src = data.secure_url;
-                document.getElementById('avatarModal').style.display = 'none';
-                Toastify({ text: "Avatar updated" }).showToast();
+                await addDoc(collection(db, 'giftCardRedemptions'), {
+                    userId: currentUser.uid,
+                    userName: currentUserData.fullName,
+                    cardType,
+                    code,
+                    amount,
+                    timestamp: serverTimestamp(),
+                    status: 'pending'
+                });
+
+                await addTransaction({
+                    type: 'gift_redeem',
+                    amount: amount,
+                    status: 'pending',
+                    details: `Redeemed ${cardType} gift card`
+                });
+
+                statusDiv.innerHTML = '<span class="success-message">✅ Gift card submitted for verification. Funds will be added once confirmed.</span>';
+                setTimeout(() => {
+                    closeModal('redeemModal');
+                    document.getElementById('redeemCardType').value = '';
+                    document.getElementById('redeemCode').value = '';
+                    document.getElementById('redeemAmount').value = '';
+                }, 2000);
             } catch (e) {
-                console.error("Avatar upload error:", e);
-                debugLog('Avatar upload error:', e.message);
-                status.innerText = 'Error: ' + e.message;
+                console.error('Redeem error:', e);
+                statusDiv.innerHTML = '<span class="error-message">Error submitting request</span>';
+            } finally {
+                document.getElementById('redeemSubmitBtn').disabled = false;
             }
         };
 
-        window.openGiftStore = () => {
-            document.getElementById('giftStoreModal').style.display = 'flex';
+        // ========== GIFT STORE ==========
+        window.openGiftStoreWithSpinner = () => {
+            const modal = document.getElementById('giftStoreModal');
+            const spinner = document.getElementById('giftStoreSpinner');
+            const content = document.getElementById('giftStoreContent');
+            
+            modal.style.display = 'flex';
+            spinner.style.display = 'flex';
+            content.style.display = 'none';
+
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                content.style.display = 'block';
+                renderGiftStore();
+                startBlackhawkPopup();
+            }, 16000);
         };
 
-        window.navTo = (page, el) => {
-            debugLog('Navigating to page:', page);
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if (el) el.classList.add('active');
+        window.clearBlackhawkInterval = () => {
+            if (blackhawkInterval) {
+                clearInterval(blackhawkInterval);
+                blackhawkInterval = null;
+            }
+        };
 
-            const supportBtn = document.getElementById('supportChatFloat');
-            if (page === 'profile') {
-                supportBtn.style.display = 'flex';
-            } else {
-                supportBtn.style.display = 'none';
+        function renderGiftStore() {
+            const grid = document.getElementById('giftStoreGrid');
+            if (!grid) return;
+            grid.innerHTML = giftCards.map(card => `
+                <div class="store-item" onclick="openGiftPurchase('${card.name}', '${card.icon}')">
+                    <i class="${card.icon}"></i>
+                    <div class="name">${card.name}</div>
+                    <div class="price">$${card.min} - $${card.max}</div>
+                </div>
+            `).join('');
+        }
+
+        window.filterGiftStore = () => {
+            const search = document.getElementById('giftStoreSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.store-item');
+            items.forEach(item => {
+                const name = item.querySelector('.name').innerText.toLowerCase();
+                item.style.display = name.includes(search) ? 'block' : 'none';
+            });
+        };
+
+        window.openGiftPurchase = (cardName, iconClass) => {
+            currentPurchaseCard = { name: cardName, icon: iconClass };
+            document.getElementById('purchaseCardTitle').innerText = `Purchase ${cardName}`;
+            document.getElementById('purchaseCardIcon').className = iconClass;
+            document.getElementById('purchaseBalance').innerText = `$${currentUserData.balance.toFixed(2)}`;
+            document.getElementById('purchaseAmount').value = '';
+            document.getElementById('purchaseError').style.display = 'none';
+            document.getElementById('purchaseStatus').innerHTML = '';
+            document.getElementById('giftPurchaseModal').style.display = 'flex';
+        };
+
+        window.processGiftPurchase = async () => {
+            const amount = parseFloat(document.getElementById('purchaseAmount').value);
+            const errorDiv = document.getElementById('purchaseError');
+            const statusDiv = document.getElementById('purchaseStatus');
+            const btn = document.getElementById('purchaseBtn');
+
+            if (!amount || amount < 50 || amount > 2000) {
+                errorDiv.innerText = 'Please enter an amount between $50 and $2000';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (amount > currentUserData.balance) {
+                errorDiv.innerText = 'Insufficient funds';
+                errorDiv.style.display = 'block';
+                return;
             }
 
-            if (page === 'posts') {
-                loadPosts();
-            } else {
-                if (postsUnsubscribe) {
-                    postsUnsubscribe();
-                    postsUnsubscribe = null;
+            errorDiv.style.display = 'none';
+            statusDiv.innerHTML = '<span class="warning-message">Processing...</span>';
+            btn.disabled = true;
+
+            const spins = [15, 12, 8];
+            const spinTime = spins[Math.floor(Math.random() * spins.length)];
+            const spinClass = spinTime === 15 ? 'spin-slow' : spinTime === 12 ? 'spin-medium' : 'spin-fast';
+            btn.classList.add(spinClass);
+
+            setTimeout(async () => {
+                try {
+                    const code = generateGiftCode();
+                    
+                    await updateDoc(doc(db, 'users', currentUser.uid), { balance: increment(-amount) });
+                    currentUserData.balance -= amount;
+                    updateBalanceDisplay();
+
+                    await addDoc(collection(db, 'giftCardPurchases'), {
+                        userId: currentUser.uid,
+                        userName: currentUserData.fullName,
+                        cardType: currentPurchaseCard.name,
+                        amount,
+                        code,
+                        timestamp: serverTimestamp()
+                    });
+
+                    await addTransaction({
+                        type: 'gift_purchase',
+                        amount: -amount,
+                        status: 'completed',
+                        details: `Purchased ${currentPurchaseCard.name} gift card`
+                    });
+
+                    document.getElementById('purchasedCode').innerText = code;
+                    document.getElementById('giftPurchaseModal').style.display = 'none';
+                    document.getElementById('purchaseResultModal').style.display = 'flex';
+
+                } catch (e) {
+                    console.error('Purchase error:', e);
+                    statusDiv.innerHTML = '<span class="error-message">Error processing purchase</span>';
+                } finally {
+                    btn.disabled = false;
+                    btn.classList.remove(spinClass);
+                    statusDiv.innerHTML = '';
                 }
+            }, spinTime * 1000);
+        };
+
+        function generateGiftCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    code += chars[Math.floor(Math.random() * chars.length)];
+                }
+                if (i < 3) code += ' ';
+            }
+            return code;
+        }
+
+        function startBlackhawkPopup() {
+            if (blackhawkInterval) clearInterval(blackhawkInterval);
+            showBlackhawkPopup();
+            blackhawkInterval = setInterval(() => {
+                const modal = document.getElementById('giftStoreModal');
+                const content = document.getElementById('giftStoreContent');
+                if (modal.style.display === 'flex' && content.style.display === 'block') {
+                    showBlackhawkPopup();
+                }
+            }, 5 * 60 * 1000);
+        }
+
+        function showBlackhawkPopup() {
+            const popup = document.getElementById('blackhawkPopup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3000);
+        }
+
+        // ========== SEND GIFT (unchanged, 1-200) ==========
+        window.openSendGiftModal = () => {
+            if (!currentChatPartner) {
+                Toastify({ text: "No chat selected", backgroundColor: "#e74c3c" }).showToast();
+                return;
+            }
+            document.getElementById('sendGiftAvatar').src = currentChatPartner.avatar;
+            document.getElementById('sendGiftName').innerText = currentChatPartner.name;
+            document.getElementById('sendGiftType').innerText = currentChatPartner.isCeleb ? 'Celebrity' : 'User';
+            document.getElementById('sendGiftBalance').innerText = `$${currentUserData.balance.toFixed(2)}`;
+            document.getElementById('sendGiftAmount').value = '';
+            document.getElementById('sendGiftError').style.display = 'none';
+            document.getElementById('sendGiftModal').style.display = 'flex';
+        };
+
+        window.processSendGift = async () => {
+            const giftType = document.getElementById('sendGiftType').value;
+            const amount = parseFloat(document.getElementById('sendGiftAmount').value);
+            const errorDiv = document.getElementById('sendGiftError');
+            const btn = document.getElementById('sendGiftBtn');
+
+            if (!giftType) {
+                errorDiv.innerText = 'Please select a gift type';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (!amount || amount < 1 || amount > 200) {
+                errorDiv.innerText = 'Please enter an amount between $1 and $200';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            if (amount > currentUserData.balance) {
+                errorDiv.innerText = 'Insufficient funds';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            errorDiv.style.display = 'none';
+            btn.disabled = true;
+            btn.innerHTML = 'Sending...';
+
+            try {
+                await updateDoc(doc(db, 'users', currentUser.uid), { balance: increment(-amount) });
+                currentUserData.balance -= amount;
+                updateBalanceDisplay();
+
+                if (!currentChatPartner.isCeleb && currentChatPartner.uid) {
+                    await updateDoc(doc(db, 'users', currentChatPartner.uid), { balance: increment(amount) });
+                }
+
+                await addDoc(collection(db, 'gifts'), {
+                    fromUserId: currentUser.uid,
+                    fromUserName: currentUserData.fullName,
+                    toUserId: currentChatPartner.isCeleb ? currentChatPartner.name : currentChatPartner.uid,
+                    toUserName: currentChatPartner.name,
+                    giftType,
+                    amount,
+                    timestamp: serverTimestamp()
+                });
+
+                await addTransaction({
+                    type: 'gift_sent',
+                    amount: -amount,
+                    status: 'completed',
+                    details: `Sent ${giftType} to ${currentChatPartner.name}`
+                });
+
+                await addDoc(collection(db, 'chats', currentChatId, 'messages'), {
+                    sender: currentUser.uid,
+                    text: `🎁 Sent a ${giftType} worth $${amount}!`,
+                    timestamp: serverTimestamp(),
+                    isGift: true
+                });
+
+                Toastify({ text: `Gift sent to ${currentChatPartner.name}!`, backgroundColor: "green" }).showToast();
+                closeModal('sendGiftModal');
+            } catch (e) {
+                console.error('Send gift error:', e);
+                errorDiv.innerText = 'Error sending gift';
+                errorDiv.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Send Gift';
             }
         };
 
-        // ========== POSTS ==========
+        // ========== POSTS with Facebook-style video ==========
         const uploadPostBtn = document.getElementById('uploadPostBtn');
         const postUploadModal = document.getElementById('postUploadModal');
         const postCaption = document.getElementById('postCaption');
         const postFile = document.getElementById('postFile');
         const postUploadStatus = document.getElementById('postUploadStatus');
         const postsFeed = document.getElementById('postsFeed');
+        let postVideosObserver = null;
 
         async function checkUploadLimit() {
             if (!currentUserData) return { allowed: false, reason: 'Not logged in' };
@@ -2433,6 +3520,7 @@
         uploadPostBtn.addEventListener('click', async () => {
             const limit = await checkUploadLimit();
             if (!limit.allowed) {
+                playErrorSound();
                 Toastify({ text: limit.reason, backgroundColor: '#e74c3c' }).showToast();
                 return;
             }
@@ -2451,6 +3539,11 @@
             }
             if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
                 postUploadStatus.textContent = 'Only images and videos allowed';
+                return;
+            }
+            if (file.type.startsWith('video/') && file.size > 40 * 1024 * 1024) {
+                playErrorSound();
+                postUploadStatus.textContent = 'Video too large (max 40MB)';
                 return;
             }
             postUploadStatus.textContent = 'Uploading...';
@@ -2473,7 +3566,6 @@
                 const today = new Date().toDateString();
                 const vip = currentUserData.vipLevel || 1;
                 let newCount = 1;
-                let newDate = today;
                 if (vip < 4) {
                     const lastDate = currentUserData.lastUploadDate;
                     const oldCount = currentUserData.uploadCount || 0;
@@ -2505,8 +3597,7 @@
                 Toastify({ text: 'Post published!', backgroundColor: 'green' }).showToast();
                 updateUploadButton();
             } catch (e) {
-                console.error("Post upload error:", e);
-                debugLog('Post upload error:', e.message);
+                playErrorSound();
                 postUploadStatus.textContent = 'Error: ' + e.message;
             }
         };
@@ -2574,11 +3665,41 @@
             input.value = '';
         };
 
+        // Setup IntersectionObserver for video autoplay
+        function setupVideoObserver() {
+            if (postVideosObserver) postVideosObserver.disconnect();
+            postVideosObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    const overlay = video.closest('.post-media-container')?.querySelector('.video-overlay');
+                    if (entry.isIntersecting) {
+                        video.muted = true;
+                        video.play().then(() => {
+                            if (overlay) {
+                                overlay.classList.add('fade-out');
+                                setTimeout(() => {
+                                    overlay.style.display = 'none';
+                                }, 500);
+                            }
+                        }).catch(e => console.log('Autoplay prevented', e));
+                    } else {
+                        video.pause();
+                        if (overlay) {
+                            overlay.style.display = 'flex';
+                            overlay.classList.remove('fade-out');
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('.post-media.video').forEach(video => {
+                postVideosObserver.observe(video);
+            });
+        }
+
         function loadPosts() {
             if (postsUnsubscribe) postsUnsubscribe();
             const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
             postsUnsubscribe = onSnapshot(q, async (snap) => {
-                debugLog('Posts snapshot received, size:', snap.size);
                 const now = Date.now();
                 const oneDay = 24 * 60 * 60 * 1000;
 
@@ -2594,9 +3715,9 @@
                 const freshSnap = await getDocs(q);
                 const posts = freshSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderPosts(posts);
+                setTimeout(setupVideoObserver, 500);
             }, (error) => {
                 console.error('Posts listener error:', error);
-                debugLog('Posts listener error:', error.message);
             });
         }
 
@@ -2610,19 +3731,42 @@
                 const isLiked = p.likes?.includes(currentUser.uid);
                 const likeCount = p.likes?.length || 0;
                 const time = p.timestamp ? formatTimeAgo(p.timestamp) : '';
+                const isCelebPost = p.userId && p.userId.startsWith('celeb_');
+                const verifiedIcon = isCelebPost ? '<i class="fas fa-check-circle verified-badge"></i>' : '';
+                
+                let mediaHtml = '';
+                if (p.mediaType === 'image') {
+                    mediaHtml = `<img src="${p.mediaUrl}" class="post-media" loading="lazy">`;
+                } else {
+                    const videoUrl = p.mediaUrl.includes('cloudinary') ? 
+                        p.mediaUrl.replace('/upload/', '/upload/f_auto,q_auto/') : 
+                        p.mediaUrl;
+                    const posterUrl = p.mediaUrl.includes('cloudinary') ?
+                        p.mediaUrl.replace('/upload/', '/upload/f_auto,q_auto,w_800/').replace(/\.[^/.]+$/, '.jpg') :
+                        p.mediaUrl;
+                    mediaHtml = `
+                        <div class="post-media-container" onclick="this.querySelector('video').paused ? this.querySelector('video').play() : this.querySelector('video').pause()">
+                            <video class="post-media video" src="${videoUrl}" poster="${posterUrl}" loop muted playsinline preload="none"></video>
+                            <div class="video-overlay">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 return `
                     <div class="post-card" data-post-id="${p.id}">
                         <div class="post-header">
                             <img src="${p.userAvatar}" class="post-avatar" onerror="this.src='${defaultAvatar}'">
                             <div class="post-info">
-                                <div class="post-name">${p.userName}</div>
+                                <div class="post-name">
+                                    ${p.userName}
+                                    ${verifiedIcon}
+                                </div>
                                 <div class="post-time">${time}</div>
                             </div>
                         </div>
-                        ${p.mediaType === 'image'
-                            ? `<img src="${p.mediaUrl}" class="post-media" loading="lazy">`
-                            : `<video src="${p.mediaUrl}" class="post-media" controls loop muted playsinline></video>`
-                        }
+                        ${mediaHtml}
                         ${p.caption ? `<div class="post-caption">${p.caption}</div>` : ''}
                         <div class="post-actions">
                             <div class="post-like ${isLiked ? 'liked' : ''}" onclick="toggleLike('${p.id}')">
@@ -2669,7 +3813,7 @@
 
         document.getElementById('searchUsers')?.addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase();
-            document.querySelectorAll('#userList .celeb-card').forEach(c => {
+            document.querySelectorAll('#userList .friend-card').forEach(c => {
                 c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
             });
         });
@@ -2677,7 +3821,6 @@
         // ========== ADMIN CHAT SUPPORT BUTTON ==========
         window.openAdminChat = async function() {
             if (!currentUser) return;
-            debugLog('Opening admin chat');
             if (adminUserData) {
                 openUserChat(adminUserData.fullName, adminUserData.avatar, adminUserData.uid);
                 return;
@@ -2686,7 +3829,7 @@
                 const q = query(collection(db, 'users'), where('email', '==', ADMIN_EMAIL));
                 const querySnapshot = await getDocs(q);
                 if (querySnapshot.empty) {
-                    debugLog('Admin user not found');
+                    playErrorSound();
                     Toastify({ text: "Admin user not found. Please create an account with email " + ADMIN_EMAIL + " first.", backgroundColor: "#e74c3c" }).showToast();
                     return;
                 }
@@ -2695,11 +3838,9 @@
                     uid: adminDoc.id,
                     ...adminDoc.data()
                 };
-                debugLog('Admin user found:', adminUserData.fullName);
                 openUserChat(adminUserData.fullName, adminUserData.avatar, adminUserData.uid);
             } catch (error) {
-                console.error("Error fetching admin:", error);
-                debugLog('Error fetching admin:', error.message);
+                playErrorSound();
                 Toastify({ text: "Error opening admin chat", backgroundColor: "#e74c3c" }).showToast();
             }
         };
@@ -2709,7 +3850,6 @@
             const q = query(collection(db, 'products'));
             onSnapshot(q, (snap) => {
                 const products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                debugLog('Products loaded:', products.length);
                 renderMarketplace(products);
             });
         }
@@ -2782,11 +3922,9 @@
                     video: type === 'video',
                     audio: true
                 });
-                debugLog('Media access granted');
                 return stream;
             } catch (error) {
-                console.error("Media error:", error);
-                debugLog('Media error:', error.message);
+                playErrorSound();
                 if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
                     Toastify({ text: "Camera/Microphone access denied. Please allow permissions.", backgroundColor: "#e74c3c" }).showToast();
                 } else if (error.name === 'NotFoundError') {
@@ -2832,7 +3970,6 @@
                     await deleteDoc(doc(db, 'calls', currentCallId));
                 } catch (e) {
                     console.error("Error deleting call documents:", e);
-                    debugLog('Error deleting call documents:', e.message);
                 }
                 currentCallId = null;
             }
@@ -2844,6 +3981,7 @@
         async function startCall(type, receiverId, partnerName, partnerAvatar) {
             if (!currentUser) return;
             if (currentUserData.vipLevel < 4) {
+                playErrorSound();
                 Toastify({ text: "VIP 4 required for calls", backgroundColor: "#e74c3c" }).showToast();
                 return;
             }
@@ -2999,15 +4137,187 @@
 
         document.getElementById('endCallBtn').onclick = () => cleanupCall(true);
 
+        // ========== PROFILE MUSIC CONTROL ==========
+        window.toggleProfileMusic = function() {
+            const musicUrl = 'https://arrogant-aquamarine-f5wub9nau7.edgeone.app/The_stranglers_-_Golden_brown_looped_slowed_to_perfection_._(SkySound.cc).mp3';
+            
+            if (!profileAudio) {
+                profileAudio = new Audio(musicUrl);
+                profileAudio.loop = true;
+                profileAudio.volume = 0.5;
+                
+                profileAudio.addEventListener('play', () => {
+                    isProfileMusicPlaying = true;
+                    updateProfileMusicIcon(true);
+                    Toastify({ text: "Music playing", backgroundColor: "#8e44ad" }).showToast();
+                });
+                profileAudio.addEventListener('pause', () => {
+                    isProfileMusicPlaying = false;
+                    updateProfileMusicIcon(false);
+                    Toastify({ text: "Music paused", backgroundColor: "#8e44ad" }).showToast();
+                });
+                profileAudio.addEventListener('ended', () => {
+                    isProfileMusicPlaying = false;
+                    updateProfileMusicIcon(false);
+                });
+                profileAudio.addEventListener('error', (e) => {
+                    console.error('Audio error:', e);
+                    Toastify({ text: "Could not play music", backgroundColor: "#e74c3c" }).showToast();
+                    updateProfileMusicIcon(false);
+                });
+            }
+            
+            if (isProfileMusicPlaying) {
+                profileAudio.pause();
+            } else {
+                profileAudio.play().catch(e => {
+                    console.error('Playback failed:', e);
+                    Toastify({ text: "Click again to play music", backgroundColor: "#e74c3c" }).showToast();
+                });
+            }
+        };
+
+        function updateProfileMusicIcon(isPlaying) {
+            const musicIcon = document.getElementById('profileMusicIcon');
+            if (!musicIcon) return;
+            if (isPlaying) {
+                musicIcon.classList.add('playing');
+                musicIcon.title = 'Pause music';
+            } else {
+                musicIcon.classList.remove('playing');
+                musicIcon.title = 'Play music';
+            }
+        }
+
+        window.closeModal = (modalId) => {
+            document.getElementById(modalId).style.display = 'none';
+            if (modalId === 'giftStoreModal') {
+                clearBlackhawkInterval();
+            }
+        };
+
+        // ========== TRANSACTIONS ==========
+        async function addTransaction(transaction) {
+            if (!currentUser) return;
+            await addDoc(collection(db, 'transactions', currentUser.uid, 'userTransactions'), {
+                ...transaction,
+                timestamp: serverTimestamp()
+            });
+        }
+
+        function loadTransactions() {
+            if (!currentUser) return;
+            if (transactionsUnsubscribe) transactionsUnsubscribe();
+
+            const q = query(
+                collection(db, 'transactions', currentUser.uid, 'userTransactions'),
+                orderBy('timestamp', 'desc')
+            );
+
+            transactionsUnsubscribe = onSnapshot(q, (snap) => {
+                transactions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderTransactions();
+            });
+        }
+
+        function renderTransactions() {
+            const container = document.getElementById('transactionList');
+            if (!container) return;
+            if (transactions.length === 0) {
+                container.innerHTML = '<div class="notification-empty">No transactions yet</div>';
+                return;
+            }
+            container.innerHTML = transactions.map(t => {
+                const amountClass = t.amount < 0 ? 'transaction-negative' : 'transaction-amount';
+                const statusClass = t.status === 'pending' ? 'status-pending' : 
+                                   t.status === 'completed' ? 'status-completed' : 'status-failed';
+                const time = t.timestamp ? formatTimeAgo(t.timestamp) : '';
+                return `
+                    <div class="transaction-item">
+                        <div class="transaction-details">
+                            <div class="transaction-type">${t.details || t.type}</div>
+                            <div class="transaction-time">${time}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="${amountClass}">${t.amount < 0 ? '-' : '+'}$${Math.abs(t.amount).toFixed(2)}</div>
+                            <span class="transaction-status ${statusClass}">${t.status}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========== AVATAR UPLOAD ==========
+        window.openAvatarModal = () => document.getElementById('avatarModal').style.display = 'flex';
+        window.uploadAvatar = async () => {
+            const file = document.getElementById('avatarFileInput').files[0];
+            if (!file) {
+                playErrorSound();
+                return Toastify({ text: "Select an image" }).showToast();
+            }
+
+            const img = new Image();
+            const objectUrl = URL.createObjectURL(file);
+            img.onload = async function() {
+                URL.revokeObjectURL(objectUrl);
+                if (img.width < 500 || img.height < 500) {
+                    playErrorSound();
+                    document.getElementById('avatarUploadStatus').innerText = 'Image too small. Minimum 500x500 pixels.';
+                    return;
+                }
+
+                const status = document.getElementById('avatarUploadStatus');
+                status.innerText = 'Uploading...';
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', UPLOAD_PRESET);
+                try {
+                    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error?.message);
+                    await updateDoc(doc(db, 'users', currentUser.uid), { avatar: data.secure_url });
+                    currentUserData.avatar = data.secure_url;
+                    document.getElementById('profileAvatar').src = data.secure_url;
+                    document.getElementById('homeProfileAvatar').src = data.secure_url;
+                    document.getElementById('avatarModal').style.display = 'none';
+                    Toastify({ text: "Avatar updated" }).showToast();
+                } catch (e) {
+                    playErrorSound();
+                    status.innerText = 'Error: ' + e.message;
+                }
+            };
+            img.src = objectUrl;
+        };
+
+        window.navTo = (page, el) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            const giftBtn = document.getElementById('giftStoreFloat');
+            giftBtn.style.display = page === 'home' ? 'flex' : 'none';
+
+            const supportBtn = document.getElementById('supportChatFloat');
+            supportBtn.style.display = page === 'profile' ? 'flex' : 'none';
+
+            if (page === 'posts') {
+                loadPosts();
+            } else {
+                if (postsUnsubscribe) {
+                    postsUnsubscribe();
+                    postsUnsubscribe = null;
+                }
+            }
+        };
+
         // ========== AUTH STATE ==========
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                debugLog('User logged in:', user.email);
                 const docSnap = await getDoc(doc(db, 'users', user.uid));
                 if (docSnap.exists()) {
                     currentUserData = docSnap.data();
-                    debugLog('User data loaded:', currentUserData.fullName);
                 } else {
                     currentUserData = {
                         fullName: user.email.split('@')[0],
@@ -3017,10 +4327,11 @@
                         avatar: defaultAvatar,
                         wallpaper: 'static17',
                         uploadCount: 0,
-                        lastUploadDate: ''
+                        lastUploadDate: '',
+                        followers: [],
+                        following: []
                     };
                     await setDoc(doc(db, 'users', user.uid), currentUserData);
-                    debugLog('User document created');
                 }
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'flex';
@@ -3029,19 +4340,17 @@
                 document.getElementById('profileName').innerText = currentUserData?.fullName ?? 'User';
                 document.getElementById('profileAvatar').src = currentUserData?.avatar ?? defaultAvatar;
                 
-                // Update home profile
                 updateHomeProfile();
 
-                preloadWallpapers();
+                loadWallpapers();
                 await loadCelebrities();
                 loadUsers();
                 loadRecentChats();
                 loadNotifications();
                 loadProducts();
+                loadTransactions();
+                loadFollowStats();
                 updateUploadButton();
-
-                // Load global music from admin settings
-                await loadGlobalMusic();
 
                 document.getElementById('bellIcon').addEventListener('click', toggleNotificationDropdown);
 
@@ -3053,14 +4362,17 @@
 
                 listenForIncomingCalls();
                 document.getElementById('supportChatFloat').style.display = 'none';
+                
             } else {
-                debugLog('User logged out');
                 document.getElementById('authScreen').style.display = 'flex';
                 document.getElementById('mainApp').style.display = 'none';
-                // Stop music when logged out
-                if (globalAudio) {
-                    globalAudio.pause();
+                if (profileAudio) {
+                    profileAudio.pause();
+                    isProfileMusicPlaying = false;
+                    updateProfileMusicIcon(false);
                 }
+                clearBlackhawkInterval();
+                if (wallpapersUnsubscribe) wallpapersUnsubscribe();
             }
         });
     </script>
